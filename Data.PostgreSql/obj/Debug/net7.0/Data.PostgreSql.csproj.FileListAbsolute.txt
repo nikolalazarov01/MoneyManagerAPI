@@ -1,0 +1,17 @@
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\bin\Debug\net7.0\Data.PostgreSql.deps.json
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\bin\Debug\net7.0\Data.PostgreSql.runtimeconfig.json
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\bin\Debug\net7.0\Data.PostgreSql.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\bin\Debug\net7.0\Data.PostgreSql.pdb
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\bin\Debug\net7.0\Data.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\bin\Debug\net7.0\Data.pdb
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.csproj.AssemblyReference.cache
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.GeneratedMSBuildEditorConfig.editorconfig
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.AssemblyInfoInputs.cache
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.AssemblyInfo.cs
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.csproj.CoreCompileInputs.cache
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.csproj.CopyComplete
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\refint\Data.PostgreSql.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.pdb
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.genruntimeconfig.cache
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\ref\Data.PostgreSql.dll

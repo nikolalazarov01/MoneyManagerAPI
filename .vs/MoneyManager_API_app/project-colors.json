@@ -5,7 +5,27 @@
       "ProjectGuid": "f0ac8cf0-dbd7-4df6-9b37-7a414b664b13",
       "DisplayName": "Data",
       "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "1d49c14b-af6d-4ece-a18f-209716b9830d": {
+      "ProjectGuid": "1d49c14b-af6d-4ece-a18f-209716b9830d",
+      "DisplayName": "MoneyManager_API",
+      "ColorIndex": 1
+    },
+    "aafa90dc-eebd-4a40-87f4-348f1b6cf238": {
+      "ProjectGuid": "aafa90dc-eebd-4a40-87f4-348f1b6cf238",
+      "DisplayName": "Core",
+      "ColorIndex": 2
+    },
+    "5f6d19d5-1239-4331-a4a3-725a9ee022af": {
+      "ProjectGuid": "5f6d19d5-1239-4331-a4a3-725a9ee022af",
+      "DisplayName": "Data.PostgreSql",
+      "ColorIndex": 3
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 4
 }
