@@ -4,7 +4,7 @@ namespace Data.PostgreSql;
 
 public class PostgreDbContext : BaseDbContext
 {
-    public PostgreDbContext(DbContextOptions options) : base(options)
+    public PostgreDbContext(DbContextOptions<PostgreDbContext> options) : base(options)
     {
     }
 }
