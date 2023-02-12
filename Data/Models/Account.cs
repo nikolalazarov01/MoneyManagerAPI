@@ -16,7 +16,7 @@ public class Account
     public string UserId { get; set; }
     public User User { get; set; }
     
-    public ICollection<AccountInfo> AccountInfos { get; set; }
+    public ICollection<AccountInfo>? AccountInfos { get; set; }
 
     public double Total { get; set; }
 

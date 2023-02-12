@@ -10,5 +10,5 @@ public class Currency
     [Required]
     public string Code { get; set; }
     
-    public ICollection<CurrencyInfo> CurrencyInfos { get; set; }
+    public ICollection<CurrencyInfo>? CurrencyInfos { get; set; }
 }

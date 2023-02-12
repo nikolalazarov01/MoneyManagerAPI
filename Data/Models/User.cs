@@ -9,7 +9,5 @@ public class User : IdentityUser
     public Guid BaseCurrencyId { get; set; }
     public Currency BaseCurrency { get; set; }
     
-    [ForeignKey("Account")]
-    public Guid AccountId { get; set; }
-    public Account Account { get; set; }
+    public ICollection<Account>? Accounts { get; set; }
 }
