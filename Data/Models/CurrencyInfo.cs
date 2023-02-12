@@ -15,4 +15,6 @@ public class CurrencyInfo
     public double BuyRate { get; set; }
     
     public double SellRate { get; set; }
+    
+    public DateTime Date { get; set; }
 }
