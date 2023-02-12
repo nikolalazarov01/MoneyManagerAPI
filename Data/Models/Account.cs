@@ -12,6 +12,10 @@ public class Account
     public Guid CurrencyId { get; set; }
     public Currency Currency { get; set; }
     
+    [ForeignKey("User")]
+    public string UserId { get; set; }
+    public User User { get; set; }
+    
     public ICollection<AccountInfo> AccountInfos { get; set; }
 
     public double Total { get; set; }
