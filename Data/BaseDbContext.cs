@@ -11,6 +11,10 @@ public class BaseDbContext : IdentityDbContext<User>
     }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Account> Accounts { get; set; }
+    public DbSet<AccountInfo> AccountInfos { get; set; }
+    public DbSet<Currency> Currencies { get; set; }
+    public DbSet<CurrencyInfo> CurrencyInfos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
