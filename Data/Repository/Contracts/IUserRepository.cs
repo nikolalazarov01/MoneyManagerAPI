@@ -4,6 +4,6 @@ namespace Data.Repository.Contracts;
 
 public interface IUserRepository
 {
-    bool IsUnique(string username);
+    Task<bool> IsUnique(string username);
     Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto);
 }
