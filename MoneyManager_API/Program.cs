@@ -7,9 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var configuration = builder.Configuration.GetSection(DatabaseConfiguration.Section).Get<DatabaseConfiguration>();
-builder.Services.AddDbContext<DbContext, PostgreDbContext>(
-    o => o.UseNpgsql(configuration.ConnectionString)
-);
+builder.Services.SetupDatabase(configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
