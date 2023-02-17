@@ -1,8 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Data.DtoModels;
 using Data.Models;
-using Data.Models.DTO;
 using Data.Repository.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +34,7 @@ public class UserRepository : IUserRepository
         return true;
     }
 
-    public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
+    public async Task<LoginResponseDtoModel> Login(LoginRequestDtoModel loginRequestDto)
     {
         var user = await _db.Set<User>().FirstOrDefaultAsync(u => 
             String.Equals(u.UserName, loginRequestDto.Username, StringComparison.CurrentCultureIgnoreCase));
@@ -43,9 +43,9 @@ public class UserRepository : IUserRepository
 
         if (user == null || !isValid)
         {
-            return new LoginResponseDto
+            return new LoginResponseDtoModel
             {
-                User = null,
+                UserName = null,
                 Token = ""
             };
         }
@@ -70,10 +70,10 @@ public class UserRepository : IUserRepository
         }
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        LoginResponseDto loginResponseDto = new LoginResponseDto()
+        LoginResponseDtoModel loginResponseDto = new LoginResponseDtoModel
         {
             Token = tokenHandler.WriteToken(token),
-            User = user
+            UserName = user.UserName
         };
 
         return loginResponseDto;

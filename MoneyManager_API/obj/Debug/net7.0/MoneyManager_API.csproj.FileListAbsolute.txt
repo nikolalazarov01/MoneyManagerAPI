@@ -52,3 +52,8 @@ D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Mono.TextTemplating.dll
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\System.CodeDom.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll

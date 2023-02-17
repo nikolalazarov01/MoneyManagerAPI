@@ -1,9 +1,9 @@
-﻿using Data.Models.DTO;
+﻿using Data.DtoModels;
 
 namespace Data.Repository.Contracts;
 
 public interface IUserRepository
 {
     Task<bool> IsUnique(string username);
-    Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto);
+    Task<LoginResponseDtoModel> Login(LoginRequestDtoModel loginRequestDto);
 }
