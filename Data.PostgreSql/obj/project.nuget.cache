@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "5c79IIh+gwH9PqTNvntPJVk8fDmdoxlnZyd33akUAELMARvg8Vk+dF71otGHCwGZ+fTxSVTeV8pNUb1LB6u+VQ==",
+  "dgSpecHash": "MTXGM1vwuiTIbtnqLA2bqNydSMtppaf1b7hYx9u51Ks7RkxMWUTddAIj6GNmzSr5u/ERIKRrVJGtIQKd5CUuaw==",
   "success": true,
   "projectFilePath": "D:\\projects\\MoneyManager\\MoneyManager_API\\MoneyManager_API_app\\Data.PostgreSql\\Data.PostgreSql.csproj",
   "expectedPackageFiles": [

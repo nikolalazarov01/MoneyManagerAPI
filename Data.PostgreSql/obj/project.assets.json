@@ -640,13 +640,24 @@
         "dependencies": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.2",
           "Microsoft.EntityFrameworkCore": "7.0.2",
-          "System.IdentityModel.Tokens.Jwt": "6.27.0"
+          "System.IdentityModel.Tokens.Jwt": "6.27.0",
+          "Utilities": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Data.dll": {}
         },
         "runtime": {
           "bin/placeholder/Data.dll": {}
+        }
+      },
+      "Utilities/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/Utilities.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Utilities.dll": {}
         }
       }
     }
@@ -1788,6 +1799,11 @@
       "type": "project",
       "path": "../Data/Data.csproj",
       "msbuildProject": "../Data/Data.csproj"
+    },
+    "Utilities/1.0.0": {
+      "type": "project",
+      "path": "../Utilities/Utilities.csproj",
+      "msbuildProject": "../Utilities/Utilities.csproj"
     }
   },
   "projectFileDependencyGroups": {

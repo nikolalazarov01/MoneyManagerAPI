@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.PostgreSql", "Data.Pos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{AAFA90DC-EEBD-4A40-87F4-348F1B6CF238}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{00AA31D3-42FD-4804-B95F-C4EB62B56337}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{AAFA90DC-EEBD-4A40-87F4-348F1B6CF238}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAFA90DC-EEBD-4A40-87F4-348F1B6CF238}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAFA90DC-EEBD-4A40-87F4-348F1B6CF238}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00AA31D3-42FD-4804-B95F-C4EB62B56337}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00AA31D3-42FD-4804-B95F-C4EB62B56337}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00AA31D3-42FD-4804-B95F-C4EB62B56337}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00AA31D3-42FD-4804-B95F-C4EB62B56337}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

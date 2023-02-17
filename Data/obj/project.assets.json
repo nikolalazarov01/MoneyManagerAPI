@@ -493,6 +493,16 @@
             "related": ".xml"
           }
         }
+      },
+      "Utilities/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/Utilities.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Utilities.dll": {}
+        }
       }
     }
   },
@@ -1410,13 +1420,19 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Utilities/1.0.0": {
+      "type": "project",
+      "path": "../Utilities/Utilities.csproj",
+      "msbuildProject": "../Utilities/Utilities.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 7.0.2",
       "Microsoft.EntityFrameworkCore >= 7.0.2",
-      "System.IdentityModel.Tokens.Jwt >= 6.27.0"
+      "System.IdentityModel.Tokens.Jwt >= 6.27.0",
+      "Utilities >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1451,7 +1467,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\projects\\MoneyManager\\MoneyManager_API\\MoneyManager_API_app\\Utilities\\Utilities.csproj": {
+              "projectPath": "D:\\projects\\MoneyManager\\MoneyManager_API\\MoneyManager_API_app\\Utilities\\Utilities.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

@@ -11,4 +11,13 @@ public class Currency
     public string Code { get; set; }
     
     public ICollection<CurrencyInfo>? CurrencyInfos { get; set; }
+
+    public Currency()
+    {
+    }
+
+    public Currency(string code)
+    {
+        Code = code;
+    }
 }

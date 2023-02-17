@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Utilities;
 
 namespace Data.Repository;
 
@@ -77,5 +78,33 @@ public class UserRepository : IUserRepository
         };
 
         return loginResponseDto;
+    }
+
+    public async Task<User> Register(RegisterRequestDtoModel registerRequestDto)
+    {
+        User user = new User
+        {
+            UserName = registerRequestDto.UserName,
+            Email = registerRequestDto.Email,
+            NormalizedEmail = registerRequestDto.Email.ToUpper(),
+            BaseCurrency = new Currency(registerRequestDto.Currency.Code)
+        };
+        try
+        {
+            var result = await _userManager.CreateAsync(user, registerRequestDto.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, UserRoles.BasicUser.ToString());
+                var userToReturn =
+                    await _db.Set<User>().FirstOrDefaultAsync(u => u.UserName == registerRequestDto.UserName);
+                return userToReturn;
+            }
+        }
+        catch (Exception ex)
+        {
+            return new User();
+        }
+
+        return new User();
     }
 }
