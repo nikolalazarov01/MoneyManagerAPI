@@ -1,8 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using Data.DtoModels;
 using Data.Models;
+using Data.Models.DTO;
 using Data.Repository.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +18,14 @@ public class UserRepository : IUserRepository
 {
     private readonly DbContext _db;
     private readonly UserManager<User> _userManager;
+    private readonly IMapper _mapper;
     private string secretKey;
 
-    public UserRepository(DbContext db, UserManager<User> userManager, IConfiguration configuration)
+    public UserRepository(DbContext db, UserManager<User> userManager, IConfiguration configuration, IMapper mapper)
     {
         _db = db;
         _userManager = userManager;
+        _mapper = mapper;
         secretKey = configuration.GetSection("ApiSettings")["SecretKey"];
     }
 
@@ -35,7 +39,7 @@ public class UserRepository : IUserRepository
         return true;
     }
 
-    public async Task<LoginResponseDtoModel> Login(LoginRequestDtoModel loginRequestDto)
+    public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
     {
         var user = await _db.Set<User>().FirstOrDefaultAsync(u => 
             String.Equals(u.UserName, loginRequestDto.Username, StringComparison.CurrentCultureIgnoreCase));
@@ -44,7 +48,7 @@ public class UserRepository : IUserRepository
 
         if (user == null || !isValid)
         {
-            return new LoginResponseDtoModel
+            return new LoginResponseDto
             {
                 UserName = null,
                 Token = ""
@@ -71,7 +75,7 @@ public class UserRepository : IUserRepository
         }
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        LoginResponseDtoModel loginResponseDto = new LoginResponseDtoModel
+        LoginResponseDto loginResponseDto = new LoginResponseDto
         {
             Token = tokenHandler.WriteToken(token),
             UserName = user.UserName
@@ -80,7 +84,7 @@ public class UserRepository : IUserRepository
         return loginResponseDto;
     }
 
-    public async Task<User> Register(RegisterRequestDtoModel registerRequestDto)
+    public async Task<UserDto> Register(RegisterRequestDto registerRequestDto)
     {
         User user = new User
         {
@@ -97,14 +101,14 @@ public class UserRepository : IUserRepository
                 await _userManager.AddToRoleAsync(user, UserRoles.BasicUser.ToString());
                 var userToReturn =
                     await _db.Set<User>().FirstOrDefaultAsync(u => u.UserName == registerRequestDto.UserName);
-                return userToReturn;
+                return _mapper.Map<UserDto>(userToReturn);
             }
         }
         catch (Exception ex)
         {
-            return new User();
+            return new UserDto();
         }
 
-        return new User();
+        return new UserDto();
     }
 }

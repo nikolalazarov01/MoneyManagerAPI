@@ -1,13 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "wz84ur7Gv7ys+qLRU8ZE9uoS38aMsQpE7uSvdK7eEg+36DPp1Hh8Nnvfm3tfCLL+iq39+PuDKnK4swgkL8AJ6w==",
+  "dgSpecHash": "+B2QfLnLDmmv3bLNrQNb0imlNaiZY6BxZD2aJabWB55Y+tjc4860rtWxXEHXqjweQxYvRKzLMyklzJYvFTvr9A==",
   "success": true,
   "projectFilePath": "D:\\projects\\MoneyManager\\MoneyManager_API\\MoneyManager_API_app\\Core\\Core.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Nikola\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Nikola\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\7.0.2\\microsoft.aspnetcore.cryptography.internal.7.0.2.nupkg.sha512",
     "C:\\Users\\Nikola\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\7.0.2\\microsoft.aspnetcore.cryptography.keyderivation.7.0.2.nupkg.sha512",
     "C:\\Users\\Nikola\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\7.0.2\\microsoft.aspnetcore.identity.entityframeworkcore.7.0.2.nupkg.sha512",
-    "C:\\Users\\Nikola\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\Nikola\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Nikola\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.2\\microsoft.entityframeworkcore.7.0.2.nupkg.sha512",
     "C:\\Users\\Nikola\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.2\\microsoft.entityframeworkcore.abstractions.7.0.2.nupkg.sha512",
     "C:\\Users\\Nikola\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.2\\microsoft.entityframeworkcore.analyzers.7.0.2.nupkg.sha512",
