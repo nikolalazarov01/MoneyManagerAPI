@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
-using Data.DtoModels;
 using Data.Models;
 using Data.Models.DTO;
 using Data.Repository.Contracts;
@@ -42,14 +41,14 @@ public class UserRepository : IUserRepository
         return operationResult;
     }
 
-    public async Task<OperationResult<LoginResponseDto>> Login(LoginRequestDto loginRequestDto)
+    public async Task<OperationResult<LoginResponseDto>> Login(string username, string password)
     {
         var operationResult = new OperationResult<LoginResponseDto>();
         
         var user = await _db.Set<User>().FirstOrDefaultAsync(u => 
-            String.Equals(u.UserName, loginRequestDto.Username, StringComparison.CurrentCultureIgnoreCase));
+            String.Equals(u.UserName, username, StringComparison.CurrentCultureIgnoreCase));
 
-        bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+        bool isValid = await _userManager.CheckPasswordAsync(user, password);
 
         if (user == null || !isValid)
         {
@@ -117,12 +116,7 @@ public class UserRepository : IUserRepository
         }
         catch (Exception ex)
         {
-            Error error = new Error
-            {
-                IsNotExpected = true,
-                Message = ex.Message
-            };
-            operationResult.AddError(error);
+            operationResult.AppendException(ex);
             return operationResult;
         }
         
