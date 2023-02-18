@@ -29,18 +29,23 @@ public class UserRepository : IUserRepository
         secretKey = configuration.GetSection("ApiSettings")["SecretKey"];
     }
 
-    public async Task<bool> IsUnique(string username)
+    public async Task<OperationResult<bool>> IsUnique(string username)
     {
+        var operationResult = new OperationResult<bool>();
         if (!await _db.Set<User>().AnyAsync(u => u.UserName == username))
         {
-            return false;
+            operationResult.Data = false;
+            return operationResult;
         }
 
-        return true;
+        operationResult.Data = true;
+        return operationResult;
     }
 
-    public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
+    public async Task<OperationResult<LoginResponseDto>> Login(LoginRequestDto loginRequestDto)
     {
+        var operationResult = new OperationResult<LoginResponseDto>();
+        
         var user = await _db.Set<User>().FirstOrDefaultAsync(u => 
             String.Equals(u.UserName, loginRequestDto.Username, StringComparison.CurrentCultureIgnoreCase));
 
@@ -48,11 +53,13 @@ public class UserRepository : IUserRepository
 
         if (user == null || !isValid)
         {
-            return new LoginResponseDto
+            Error error = new Error
             {
-                UserName = null,
-                Token = ""
+                IsNotExpected = false,
+                Message = "User not found"
             };
+            operationResult.AddError(error);
+            return operationResult;
         }
 
         var roles = await _userManager.GetRolesAsync(user);
@@ -81,11 +88,14 @@ public class UserRepository : IUserRepository
             UserName = user.UserName
         };
 
-        return loginResponseDto;
+        operationResult.Data = loginResponseDto;
+        return operationResult;
     }
 
-    public async Task<UserDto> Register(RegisterRequestDto registerRequestDto)
+    public async Task<OperationResult<UserDto>> Register(RegisterRequestDto registerRequestDto)
     {
+        var operationResult = new OperationResult<UserDto>();
+        
         User user = new User
         {
             UserName = registerRequestDto.UserName,
@@ -101,14 +111,27 @@ public class UserRepository : IUserRepository
                 await _userManager.AddToRoleAsync(user, UserRoles.BasicUser.ToString());
                 var userToReturn =
                     await _db.Set<User>().FirstOrDefaultAsync(u => u.UserName == registerRequestDto.UserName);
-                return _mapper.Map<UserDto>(userToReturn);
+                operationResult.Data = _mapper.Map<UserDto>(userToReturn);
+                return operationResult;
             }
         }
         catch (Exception ex)
         {
-            return new UserDto();
+            Error error = new Error
+            {
+                IsNotExpected = true,
+                Message = ex.Message
+            };
+            operationResult.AddError(error);
+            return operationResult;
         }
-
-        return new UserDto();
+        
+        
+        operationResult.AddError(new Error
+        {
+            IsNotExpected = true,
+            Message = "Error in register"
+        });
+        return operationResult;
     }
 }
