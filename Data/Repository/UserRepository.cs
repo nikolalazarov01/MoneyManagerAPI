@@ -28,16 +28,15 @@ public class UserRepository : IUserRepository
         secretKey = configuration.GetSection("ApiSettings")["SecretKey"];
     }
 
-    public async Task<OperationResult<bool>> IsUnique(string username)
+    public async Task<OperationResult> IsUnique(string username)
     {
-        var operationResult = new OperationResult<bool>();
+        var operationResult = new OperationResult();
         if (!await _db.Set<User>().AnyAsync(u => u.UserName == username))
         {
-            operationResult.Data = false;
+            operationResult.AddError(new Error{IsNotExpected = false, Message = "User with that username already exists!"});
             return operationResult;
         }
-
-        operationResult.Data = true;
+        
         return operationResult;
     }
 

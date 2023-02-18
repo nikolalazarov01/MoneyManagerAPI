@@ -18,6 +18,12 @@ public class UserService
         var operationResult = new OperationResult<LoginResponseDto>();
         try
         {
+            var isValid = await this._repository.IsUnique(loginRequestDto.Username);
+            if (!isValid.IsSuccessful)
+            {
+                return operationResult.AppendErrors(isValid);
+            }
+            
             var result = await this._repository.Login(loginRequestDto.Username, loginRequestDto.Password);
 
             return !result.IsSuccessful ? operationResult.AppendErrors(result) : operationResult.WithData(result.Data);
