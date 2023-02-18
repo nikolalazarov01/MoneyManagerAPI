@@ -1,11 +1,12 @@
-﻿using Data.Models;
+﻿using Core.Contracts.Services;
+using Data.Models;
 using Data.Models.DTO;
 using Data.Repository;
 using Utilities;
 
 namespace Core.Services;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly UserRepository _repository;
 

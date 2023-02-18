@@ -1,6 +1,10 @@
-﻿namespace Core.Contracts.Services;
+﻿using Data.Models.DTO;
+using Utilities;
 
-public interface IUserService<T> where T : class
+namespace Core.Contracts.Services;
+
+public interface IUserService
 {
-    
+    Task<OperationResult<UserDto>> RegisterAsync(RegisterRequestDto registerRequestDto);
+    Task<OperationResult<LoginResponseDto>> LoginAsync(LoginRequestDto loginRequestDto);
 }
