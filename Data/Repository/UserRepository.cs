@@ -90,25 +90,18 @@ public class UserRepository : IUserRepository
         return operationResult;
     }
 
-    public async Task<OperationResult<UserDto>> Register(RegisterRequestDto registerRequestDto)
+    public async Task<OperationResult<UserDto>> Register(User user, string password)
     {
         var operationResult = new OperationResult<UserDto>();
         
-        User user = new User
-        {
-            UserName = registerRequestDto.UserName,
-            Email = registerRequestDto.Email,
-            NormalizedEmail = registerRequestDto.Email.ToUpper(),
-            BaseCurrency = new Currency(registerRequestDto.Currency.Code)
-        };
         try
         {
-            var result = await _userManager.CreateAsync(user, registerRequestDto.Password);
+            var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.BasicUser.ToString());
                 var userToReturn =
-                    await _db.Set<User>().FirstOrDefaultAsync(u => u.UserName == registerRequestDto.UserName);
+                    await _db.Set<User>().FirstOrDefaultAsync(u => u.UserName == user.UserName);
                 operationResult.Data = _mapper.Map<UserDto>(userToReturn);
                 return operationResult;
             }
