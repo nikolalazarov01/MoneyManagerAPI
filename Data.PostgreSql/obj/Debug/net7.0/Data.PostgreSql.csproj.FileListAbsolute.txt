@@ -15,3 +15,5 @@ D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\o
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.pdb
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\Data.PostgreSql.genruntimeconfig.cache
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\obj\Debug\net7.0\ref\Data.PostgreSql.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\bin\Debug\net7.0\Utilities.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data.PostgreSql\bin\Debug\net7.0\Utilities.pdb

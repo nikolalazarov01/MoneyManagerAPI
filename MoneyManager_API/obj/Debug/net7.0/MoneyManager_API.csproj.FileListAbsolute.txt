@@ -57,3 +57,13 @@ D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\AutoMapper.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\FluentValidation.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\FluentValidation.AspNetCore.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\FluentValidation.DependencyInjectionExtensions.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Utilities.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\MoneyManager_API\bin\Debug\net7.0\Utilities.pdb

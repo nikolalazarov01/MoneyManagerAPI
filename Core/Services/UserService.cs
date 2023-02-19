@@ -2,15 +2,16 @@
 using Data.Models;
 using Data.Models.DTO;
 using Data.Repository;
+using Data.Repository.Contracts;
 using Utilities;
 
 namespace Core.Services;
 
 public class UserService : IUserService
 {
-    private readonly UserRepository _repository;
+    private readonly IUserRepository _repository;
 
-    public UserService(UserRepository repository)
+    public UserService(IUserRepository repository)
     {
         _repository = repository;
     }

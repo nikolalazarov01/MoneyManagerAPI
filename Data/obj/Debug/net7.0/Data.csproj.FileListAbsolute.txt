@@ -10,3 +10,6 @@ D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data\obj\Debug\ne
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data\obj\Debug\net7.0\refint\Data.dll
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data\obj\Debug\net7.0\Data.pdb
 D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data\obj\Debug\net7.0\ref\Data.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data\bin\Debug\net7.0\Utilities.dll
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data\bin\Debug\net7.0\Utilities.pdb
+D:\projects\MoneyManager\MoneyManager_API\MoneyManager_API_app\Data\obj\Debug\net7.0\Data.csproj.CopyComplete

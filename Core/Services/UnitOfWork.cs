@@ -9,7 +9,7 @@ public class UnitOfWork : IUnitOfWork
 {
     public IUserService Users { get; private set; }
 
-    public UnitOfWork(UserRepository userRepository)
+    public UnitOfWork(IUserRepository userRepository)
     {
         Users = new UserService(userRepository);
     }
