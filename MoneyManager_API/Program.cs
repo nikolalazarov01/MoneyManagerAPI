@@ -3,6 +3,7 @@ using Core.Configuration;
 using Data.Configuration;
 using Data.PostgreSql;
 using Microsoft.EntityFrameworkCore;
+using MoneyManager_API.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.SetupDatabase(configuration);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.SetupServices();
+builder.Services.SetupValidation();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
