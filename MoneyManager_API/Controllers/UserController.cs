@@ -28,7 +28,7 @@ public class UserController : ControllerBase
         _validator = validator;
     }
 
-    [HttpPost]
+    [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequest, CancellationToken token)
     {
         var validationResult = await this.ValidateAsync(registerRequest, token);
