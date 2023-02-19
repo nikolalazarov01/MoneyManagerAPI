@@ -37,9 +37,9 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<OperationResult<UserDto>> RegisterAsync(RegisterRequestDto registerRequestDto)
+    public async Task<OperationResult<User>> RegisterAsync(RegisterRequestDto registerRequestDto)
     {
-        var operationResult = new OperationResult<UserDto>();
+        var operationResult = new OperationResult<User>();
         try
         {
             User user = new User

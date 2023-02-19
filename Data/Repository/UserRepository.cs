@@ -90,9 +90,9 @@ public class UserRepository : IUserRepository
         return operationResult;
     }
 
-    public async Task<OperationResult<UserDto>> Register(User user, string password)
+    public async Task<OperationResult<User>> Register(User user, string password)
     {
-        var operationResult = new OperationResult<UserDto>();
+        var operationResult = new OperationResult<User>();
         
         try
         {
@@ -102,7 +102,7 @@ public class UserRepository : IUserRepository
                 await _userManager.AddToRoleAsync(user, UserRoles.BasicUser.ToString());
                 var userToReturn =
                     await _db.Set<User>().FirstOrDefaultAsync(u => u.UserName == user.UserName);
-                operationResult.Data = _mapper.Map<UserDto>(userToReturn);
+                operationResult.Data = userToReturn;
                 return operationResult;
             }
         }
