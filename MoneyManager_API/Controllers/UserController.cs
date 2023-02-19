@@ -37,8 +37,8 @@ public class UserController : ControllerBase
         return await this.RegisterAsync(registerRequest, token);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken token)
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken token)
     {
         return Ok();
     }
