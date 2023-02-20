@@ -19,22 +19,33 @@ public class UserController : ControllerBase
 {
     private readonly IUnitOfWork _services;
     private readonly IMapper _mapper;
-    private readonly IValidator<RegisterRequestDto> _validator;
+    private readonly IValidator<RegisterRequestDto> _validatorRegister;
+    private readonly IValidator<LoginRequestDto> _validatorLogin;
 
-    public UserController(IUnitOfWork services, IMapper mapper, IValidator<RegisterRequestDto> validator)
+    public UserController(IUnitOfWork services, IMapper mapper, IValidator<RegisterRequestDto> validatorRegister, IValidator<LoginRequestDto> validatorLogin)
     {
         _services = services;
         _mapper = mapper;
-        _validator = validator;
+        _validatorRegister = validatorRegister;
+        _validatorLogin = validatorLogin;
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequest, CancellationToken token)
     {
-        var validationResult = await this.ValidateAsync(registerRequest, token);
+        var validationResult = await this.ValidateRegisterAsync(registerRequest, token);
         if (validationResult is { IsValid: false }) return this.ValidationError(validationResult);
 
         return await this.RegisterAsync(registerRequest, token);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest, CancellationToken token)
+    {
+        var validationResult = await this.ValidateLoginAsync(loginRequest, token);
+        if (validationResult is { IsValid: false }) return this.ValidationError(validationResult);
+
+        return await this.LoginAsync(loginRequest, token);
     }
 
     [HttpGet("{id:guid}")]
@@ -43,21 +54,33 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    private async Task<ValidationResult> ValidateAsync(RegisterRequestDto registerRequest, CancellationToken token)
+    private async Task<ValidationResult> ValidateRegisterAsync(RegisterRequestDto registerRequest, CancellationToken token)
     {
-        if (this._validator is null) return null;
-        return await this._validator.ValidateAsync(registerRequest, token);
+        if (this._validatorRegister is null) return null;
+        return await this._validatorRegister.ValidateAsync(registerRequest, token);
+    }
+
+    private async Task<ValidationResult> ValidateLoginAsync(LoginRequestDto loginRequest, CancellationToken token)
+    {
+        if (this._validatorLogin is null) return null;
+        return await this._validatorLogin.ValidateAsync(loginRequest, token);
     }
 
     private async Task<IActionResult> RegisterAsync(RegisterRequestDto registerRequestDto, CancellationToken token)
     {
-        var operationResult = new OperationResult<UserDto>();
-        
         var result = await this._services.Users.RegisterAsync(registerRequestDto);
-        if (!result.IsSuccessful) return this.Error(result);;
+        if (!result.IsSuccessful) return this.Error(result);
 
         var representation = this._mapper.Map<UserDto>(result.Data);
         
         return CreatedAtAction("GetById", new {Id = result.Data.Id}, representation);
+    }
+
+    private async Task<IActionResult> LoginAsync(LoginRequestDto loginRequest, CancellationToken token)
+    {
+        var result = await this._services.Users.LoginAsync(loginRequest);
+        if (!result.IsSuccessful) return this.Error(result);
+
+        return Ok(result.Data);
     }
 }
