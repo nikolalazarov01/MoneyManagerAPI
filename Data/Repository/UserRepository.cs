@@ -33,7 +33,7 @@ public class UserRepository : IUserRepository
     public async Task<OperationResult> IsUnique(string username)
     {
         var operationResult = new OperationResult();
-        if (!await _db.Set<User>().AnyAsync(u => u.UserName == username))
+        if (await _db.Set<User>().AnyAsync(u => u.UserName == username))
         {
             operationResult.AddError(new Error{IsNotExpected = false, Message = "User with that username already exists!"});
             return operationResult;
