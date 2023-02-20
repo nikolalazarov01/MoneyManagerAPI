@@ -13,3 +13,12 @@ public class UserValidator : AbstractValidator<RegisterRequestDto>
         this.RuleFor(u => u.Currency).NotEmpty();
     }
 }
+
+public class UserLoginValidator : AbstractValidator<LoginRequestDto>
+{
+    public UserLoginValidator()
+    {
+        this.RuleFor(u => u.Username).NotEmpty();
+        this.RuleFor(u => u.Password).NotEmpty();
+    }
+}

@@ -17,14 +17,16 @@ public class UserRepository : IUserRepository
 {
     private readonly DbContext _db;
     private readonly UserManager<User> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IMapper _mapper;
     private string secretKey;
 
-    public UserRepository(DbContext db, UserManager<User> userManager, IConfiguration configuration, IMapper mapper)
+    public UserRepository(DbContext db, UserManager<User> userManager, IConfiguration configuration, IMapper mapper, RoleManager<IdentityRole> roleManager)
     {
         _db = db;
         _userManager = userManager;
         _mapper = mapper;
+        _roleManager = roleManager;
         secretKey = configuration.GetSection("ApiSettings")["SecretKey"];
     }
 
@@ -45,7 +47,7 @@ public class UserRepository : IUserRepository
         var operationResult = new OperationResult<LoginResponseDto>();
         
         var user = await _db.Set<User>().FirstOrDefaultAsync(u => 
-            String.Equals(u.UserName, username, StringComparison.CurrentCultureIgnoreCase));
+            u.UserName.ToLower() == username.ToLower());
 
         bool isValid = await _userManager.CheckPasswordAsync(user, password);
 
@@ -99,6 +101,11 @@ public class UserRepository : IUserRepository
             var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
+                if (!_roleManager.RoleExistsAsync(UserRoles.Admin.ToString()).GetAwaiter().GetResult())
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin.ToString()));
+                    await _roleManager.CreateAsync(new IdentityRole(UserRoles.BasicUser.ToString()));
+                }
                 await _userManager.AddToRoleAsync(user, UserRoles.BasicUser.ToString());
                 var userToReturn =
                     await _db.Set<User>().FirstOrDefaultAsync(u => u.UserName == user.UserName);

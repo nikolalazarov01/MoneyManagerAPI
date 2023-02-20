@@ -39,7 +39,7 @@ public class UserController : ControllerBase
         return await this.RegisterAsync(registerRequest, token);
     }
 
-    [HttpGet]
+    [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest, CancellationToken token)
     {
         var validationResult = await this.ValidateLoginAsync(loginRequest, token);
