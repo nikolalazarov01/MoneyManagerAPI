@@ -38,6 +38,24 @@ public class UserService : IUserService
         }
     }
 
+    public async Task<OperationResult> DeleteAsync(Guid id)
+    {
+        var operationResult = new OperationResult();
+
+        try
+        {
+            var result = await _repository.Delete(id);
+            if (!result.IsSuccessful) return operationResult.AppendErrors(result);
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+            return operationResult;
+        }
+    }
+
     public async Task<OperationResult<User>> RegisterAsync(RegisterRequestDto registerRequestDto)
     {
         var operationResult = new OperationResult<User>();
