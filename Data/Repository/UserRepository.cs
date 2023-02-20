@@ -127,4 +127,52 @@ public class UserRepository : IUserRepository
         });
         return operationResult;
     }
+
+    public async Task<OperationResult> Delete(Guid id)
+    {
+        var operationResult = new OperationResult();
+
+        try
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user != null)
+            {
+                var logins = await _userManager.GetLoginsAsync(user);
+                var rolesForUser = await _userManager.GetRolesAsync(user);
+
+                await using (var transaction = await _db.Database.BeginTransactionAsync())
+                {
+                    foreach (var login in logins.ToList())
+                    {
+                        await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
+                    }
+
+                    if (rolesForUser.Any())
+                    {
+                        foreach (var item in rolesForUser.ToList())
+                        {
+                            // item should be the name of the role
+                            var result = await _userManager.RemoveFromRoleAsync(user, item);
+                        }
+                    }
+
+                    await _userManager.DeleteAsync(user);
+                    await transaction.CommitAsync();
+                }
+
+                return operationResult;
+            }
+            else
+            {
+                operationResult.AddError(new Error { Message = "User with that id is not found!" });
+                return operationResult;
+            }
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+            return operationResult;
+        }
+    }
 }
