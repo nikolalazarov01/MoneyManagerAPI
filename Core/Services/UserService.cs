@@ -21,12 +21,6 @@ public class UserService : IUserService
         var operationResult = new OperationResult<LoginResponseDto>();
         try
         {
-            var isValid = await this._repository.IsUnique(loginRequestDto.Username);
-            if (!isValid.IsSuccessful)
-            {
-                return operationResult.AppendErrors(isValid);
-            }
-            
             var result = await this._repository.Login(loginRequestDto.Username, loginRequestDto.Password);
 
             return !result.IsSuccessful ? operationResult.AppendErrors(result) : operationResult.WithData(result.Data);
@@ -61,6 +55,12 @@ public class UserService : IUserService
         var operationResult = new OperationResult<User>();
         try
         {
+            var isValid = await this._repository.IsUnique(registerRequestDto.UserName);
+            if (!isValid.IsSuccessful)
+            {
+                return operationResult.AppendErrors(isValid);
+            }
+
             User user = new User
             {
                 UserName = registerRequestDto.UserName,

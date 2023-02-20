@@ -48,6 +48,18 @@ public class UserController : ControllerBase
         return await this.LoginAsync(loginRequest, token);
     }
 
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
+    {
+        if (id == Guid.Empty) return BadRequest();
+
+        var result = await this._services.Users.DeleteAsync(id);
+
+        if (!result.IsSuccessful) return this.Error(result);
+
+        return this.NoContent();
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken token)
     {
