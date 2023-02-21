@@ -1,6 +1,8 @@
-﻿namespace Data.Models.DTO;
+﻿using Data.Models.DTO.Base;
 
-public class LoginResponseDto
+namespace Data.Models.DTO;
+
+public class LoginResponseDto : BaseDtoModel
 {
     public string? UserName { get; set; }
     public string Token { get; set; }

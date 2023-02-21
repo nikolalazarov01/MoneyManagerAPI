@@ -1,6 +1,8 @@
-﻿namespace Data.Models.DTO;
+﻿using Data.Models.DTO.Base;
 
-public class BaseCurrencyDto
+namespace Data.Models.DTO;
+
+public class BaseCurrencyDto : BaseDtoModel
 {
     public string Code { get; set; }
 }
