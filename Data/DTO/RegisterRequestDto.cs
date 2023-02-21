@@ -2,7 +2,7 @@
 
 namespace Data.Models.DTO;
 
-public class RegisterRequestDto : BaseDtoModel
+public class RegisterRequestDto
 {
     public string UserName { get; set; }
     public string Email { get; set; }

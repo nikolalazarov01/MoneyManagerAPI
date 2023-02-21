@@ -106,12 +106,12 @@ public class UserController : ControllerBase
         {
             new()
             {
-                Url = this.AbsoluteUrl("Login", "User", new { UserId = user.Id }), Method = HttpMethods.Post,
+                Url = this.AbsoluteUrl("Login", "User", null), Method = HttpMethods.Post,
                 Rel = "login"
             },
             new()
             {
-                Url = this.AbsoluteUrl("Delete", "User", new { UserId = user.Id }), Method = HttpMethods.Delete,
+                Url = this.AbsoluteUrl("Delete", "User", new { Id = user.Id }), Method = HttpMethods.Delete,
                 Rel = "delete"
             }
         };
