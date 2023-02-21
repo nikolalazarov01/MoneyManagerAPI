@@ -50,6 +50,16 @@ public class UserService : IUserService
         }
     }
 
+    public async Task<OperationResult<User>> GetById(Guid id)
+    {
+        var operationResult = new OperationResult<User>();
+
+        var result = await _repository.GetById(id);
+        if (!result.IsSuccessful) return operationResult.AppendErrors(result);
+
+        return operationResult.WithData(result.Data);
+    }
+
     public async Task<OperationResult<User>> RegisterAsync(RegisterRequestDto registerRequestDto)
     {
         var operationResult = new OperationResult<User>();
