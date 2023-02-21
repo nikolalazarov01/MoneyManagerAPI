@@ -85,6 +85,7 @@ public class UserController : ControllerBase
         if (!result.IsSuccessful) return this.Error(result);
 
         var representation = this._mapper.Map<UserDto>(result.Data);
+        representation.Links = this.GetHateoasLinks(result.Data);
         
         return CreatedAtAction("GetById", new {Id = result.Data.Id}, representation);
     }
