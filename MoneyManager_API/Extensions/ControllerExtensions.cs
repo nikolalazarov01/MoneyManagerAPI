@@ -32,4 +32,13 @@ public static class ControllerExtensions
         var statusCode = operationResult.Errors.Any(e => e.IsNotExpected) ? StatusCodes.Status500InternalServerError : StatusCodes.Status400BadRequest;
         return controller.Problem(operationResult.ToString(), controller.Request.Path, statusCode, "Your actions was not executed successfully.");
     }
+
+    public static string AbsoluteUrl(this ControllerBase controller, string actionName, string controllerName,
+        object values)
+    {
+        if (controller is null) throw new ArgumentNullException(nameof(controller));
+
+        var request = controller.HttpContext.Request;
+        return controller.Url.Action(actionName, controllerName, values, request.Scheme, request.Host.Value);
+    }
 }

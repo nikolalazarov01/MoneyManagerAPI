@@ -4,6 +4,7 @@ using AutoMapper;
 using Core.Contracts;
 using Data.Models;
 using Data.Models.DTO;
+using Data.Models.DTO.Hateoas;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using MoneyManager_API.Configuration;
@@ -94,5 +95,26 @@ public class UserController : ControllerBase
         if (!result.IsSuccessful) return this.Error(result);
 
         return Ok(result.Data);
+    }
+
+    private IEnumerable<HateoasLink> GetHateoasLinks(User user)
+    {
+        if (user is null) return Enumerable.Empty<HateoasLink>();
+
+        var links = new List<HateoasLink>()
+        {
+            new()
+            {
+                Url = this.AbsoluteUrl("Login", "User", new { UserId = user.Id }), Method = HttpMethods.Post,
+                Rel = "login"
+            },
+            new()
+            {
+                Url = this.AbsoluteUrl("Delete", "User", new { UserId = user.Id }), Method = HttpMethods.Delete,
+                Rel = "delete"
+            }
+        };
+
+        return links;
     }
 }
