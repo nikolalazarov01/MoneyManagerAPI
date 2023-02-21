@@ -175,4 +175,29 @@ public class UserRepository : IUserRepository
             return operationResult;
         }
     }
+
+    public async Task<OperationResult<User>> GetById(Guid id)
+    {
+        var operationResult = new OperationResult<User>();
+
+        try
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user is null)
+            {
+                operationResult.AddError(new Error { Message = "User not found!" });
+            }
+            else
+                return operationResult.WithData(user);
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+            return operationResult;
+        }
+
+        operationResult.AddError(new Error { IsNotExpected = true, Message = "Error in the server!" });
+        return operationResult;
+    }
 }

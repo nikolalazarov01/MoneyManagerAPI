@@ -10,4 +10,5 @@ public interface IUserRepository
     Task<OperationResult<LoginResponseDto>> Login(string username, string password);
     Task<OperationResult<User>> Register(User user, string password);
     Task<OperationResult> Delete(Guid id);
+    Task<OperationResult<User>> GetById(Guid id);
 }
