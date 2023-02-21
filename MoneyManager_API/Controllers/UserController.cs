@@ -64,7 +64,14 @@ public class UserController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken token)
     {
-        return Ok();
+        if (id == Guid.Empty) return BadRequest();
+
+        var result = await _services.Users.GetById(id);
+        if (!result.IsSuccessful) return this.Error(result);
+
+        var representation = this._mapper.Map<UserDto>(result.Data);
+
+        return Ok(representation);
     }
 
     private async Task<ValidationResult> ValidateRegisterAsync(RegisterRequestDto registerRequest, CancellationToken token)
@@ -113,6 +120,11 @@ public class UserController : ControllerBase
             {
                 Url = this.AbsoluteUrl("Delete", "User", new { Id = user.Id }), Method = HttpMethods.Delete,
                 Rel = "delete"
+            },
+            new()
+            {
+                Url = this.AbsoluteUrl("GetById", "User", new { Id = user.Id }), Method = HttpMethods.Get,
+                Rel = "self"
             }
         };
 
