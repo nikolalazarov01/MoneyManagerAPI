@@ -1,11 +1,12 @@
 ﻿using System.Linq.Expressions;
+using Data.Models.Contracts;
 using Data.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Utilities;
 
 namespace Data.Repository;
 
-public class Repository<T> : IRepository<T> where T : class
+public class Repository<T> : IRepository<T> where T : class, IEntity
 {
     private readonly DbContext _db;
 
@@ -52,9 +53,27 @@ public class Repository<T> : IRepository<T> where T : class
         return operationResult;
     }
 
-    public Task<OperationResult> UpdateAsync(T entity, CancellationToken token)
+    public async Task<OperationResult> UpdateAsync(T entity, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var operationResult = new OperationResult();
+
+        if (operationResult.ValidateNotNull(entity) == false) return operationResult;
+
+        try
+        {
+            var trackedEntity = this._db.Set<T>().Local.FirstOrDefault(x => x.Id == entity.Id);
+            if (trackedEntity != null) this._db.Entry(trackedEntity).State = EntityState.Detached;
+            this._db.Entry(entity).State = EntityState.Modified;
+
+            this._db.Update(entity);
+            await this._db.SaveChangesAsync(token);
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+        }
+
+        return operationResult;
     }
 
     public Task<OperationResult<T>> GetAsync(IEnumerable<Expression<Func<T, bool>>> func, CancellationToken token)

@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Data.Models.Contracts;
 
 namespace Data.Models;
 
-public class Currency
+public class Currency : IEntity
 {
     [Key]
     public Guid Id { get; set; }

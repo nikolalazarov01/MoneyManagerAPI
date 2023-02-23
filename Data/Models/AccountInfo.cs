@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Data.Models.Contracts;
 using Data.Utils;
 
 namespace Data.Models;
 
-public class AccountInfo
+public class AccountInfo : IEntity
 {
     [Key]
     public Guid Id { get; set; }

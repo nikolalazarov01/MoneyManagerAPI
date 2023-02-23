@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Data.Models.Contracts;
 
 namespace Data.Models;
 
-public class CurrencyInfo
+public class CurrencyInfo : IEntity
 {
     [Key]
     public Guid Id { get; set; }
