@@ -1,4 +1,7 @@
-﻿namespace Utilities;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+
+namespace Utilities;
 
 public static class OperationResultExtensions
 {
@@ -27,4 +30,18 @@ public static class OperationResultExtensions
         var error = new Error { IsNotExpected = true, Message = ex.Message };
         principal.AddError(error);
     }
+    
+#nullable enable
+    public static bool ValidateNotNull<TValue>(this OperationResult operationResult, [NotNullWhen(true)] TValue? value, [CallerFilePath] string? filePath = null, [CallerMemberName] string? memberName = null, [CallerLineNumber] int line = -1, [CallerArgumentExpression("value")] string? expression = null)
+    {
+        if (operationResult is null) throw new ArgumentNullException(nameof(operationResult));
+        if (value is not null) return true;
+
+        var error = new Error { Message = $"{FormatErrorMessage(filePath, memberName, line, expression)} should not be null." };
+        operationResult.AddError(error);
+        return false;
+    }
+#nullable restore
+    
+    private static string FormatErrorMessage(string filePath, string memberName, int line, string argumentExpression) => $"{filePath} ({memberName};{line}) - Expression [{argumentExpression}]";
 }
