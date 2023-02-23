@@ -5,5 +5,6 @@ namespace Core.Contracts;
 
 public interface IUnitOfWork
 {
-
+    IUserService Users { get; }
+    IAccountService Accounts { get; }
 }

@@ -12,7 +12,9 @@ public static class ServicesConfigurationExtensions
     public static void SetupServices(this IServiceCollection serviceCollection)
     {
         if (serviceCollection is null) throw new ArgumentNullException(nameof(serviceCollection));
-        
+
+        serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        serviceCollection.AddScoped<IRepositoryFactory, RepositoryFactory>();
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }
