@@ -25,7 +25,7 @@ public class CurrencyService : ICurrencyService
             {
                 c =>
                     c.Code.ToLower() == currencyDto.Code.ToLower()
-            }, token);
+            },null, token);
 
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
 

@@ -77,13 +77,14 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
         return operationResult;
     }
 
-    public async Task<OperationResult<T>> GetAsync(IEnumerable<Expression<Func<T, bool>>> func, CancellationToken token)
+    public async Task<OperationResult<T>> GetAsync(IEnumerable<Expression<Func<T, bool>>> func, IEnumerable<Func<IQueryable<T>, IQueryable<T>>> transforms,
+        CancellationToken token)
     {
         var operationResult = new OperationResult<T>();
 
         try
         {
-            var result = await this._db.Set<T>().Filter(func).FirstOrDefaultAsync(token);
+            var result = await this._db.Set<T>().Filter(func).Transform(transforms).FirstOrDefaultAsync(token);
             operationResult.Data = result;
         }
         catch (Exception ex)

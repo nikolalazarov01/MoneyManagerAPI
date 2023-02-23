@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Utilities;
 
 namespace Data.Extensions;
 
@@ -13,6 +14,15 @@ public static class QueryableExtensions
             queryable = queryable.Where(filter);
         }
 
+        return queryable;
+    }
+    
+    public static IQueryable<T> Transform<T>(this IQueryable<T> queryable, IEnumerable<Func<IQueryable<T>, IQueryable<T>>> transforms)
+        where T : class
+    {
+        if (queryable is null) throw new ArgumentNullException(nameof(queryable));
+
+        foreach (var transform in transforms.OrEmptyIfNull().IgnoreNullValues()) queryable = transform(queryable);
         return queryable;
     }
 }

@@ -15,6 +15,7 @@ using Utilities;
 namespace MoneyManager_API.Controllers;
 
 [ApiController]
+[Route("/user")]
 public class UserController : ControllerBase
 {
     private readonly IUnitOfWork _services;
@@ -28,6 +29,20 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
 
+    [HttpGet("get-info")]
+    [Authorize]
+    public async Task<IActionResult> GetUserById(CancellationToken token)
+    {
+        var userId = await this.GetUserId();
+
+        var result = await this._services.Users.GetUserById(userId, token);
+        if (!result.IsSuccessful) return this.Error(result);
+
+        var representation = _mapper.Map<UserDto>(result.Data);
+
+        return Ok(representation);
+    }
+    
     [HttpPost("base-currency")]
     [Authorize]
     public async Task<IActionResult> SetBaseCurrency([FromBody] BaseCurrencyDto currencyDto, CancellationToken cancellationToken)
@@ -35,12 +50,9 @@ public class UserController : ControllerBase
         var validationResult = await this.ValidateCurrencyAsync(currencyDto, cancellationToken);
         if (!validationResult.IsValid) return this.ValidationError(validationResult);
 
-        var token = await HttpContext.GetTokenAsync("access_token");
-        var handler = new JwtSecurityTokenHandler();
-        var jwt = handler.ReadJwtToken(token);
-        var userId = jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value;
+        var userId = await this.GetUserId();
 
-        var result = await this.SetBaseCurrencyInternally(currencyDto, Guid.Parse(userId), cancellationToken);
+        var result = await this.SetBaseCurrencyInternally(currencyDto, userId, cancellationToken);
         if (!result.IsSuccessful) return this.Error(result);
 
         return Ok();
@@ -88,5 +100,15 @@ public class UserController : ControllerBase
         }
 
         return operationResult;
+    }
+    
+    private async Task<Guid> GetUserId()
+    {
+        var token = await HttpContext.GetTokenAsync("access_token");
+        var handler = new JwtSecurityTokenHandler();
+        var jwt = handler.ReadJwtToken(token);
+        var userId = jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value;
+        
+        return Guid.Parse(userId);
     }
 }
