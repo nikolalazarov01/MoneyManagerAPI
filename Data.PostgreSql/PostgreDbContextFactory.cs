@@ -8,10 +8,10 @@ public class PostgreDbContextFactory : IDesignTimeDbContextFactory<PostgreDbCont
     public PostgreDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<PostgreDbContext>();
-        //if (args is null || !args.Any() || string.IsNullOrWhiteSpace(args[0]))
-            //throw new InvalidOperationException("Please provide a valid connection string.");
+        if (args is null || !args.Any() || string.IsNullOrWhiteSpace(args[0]))
+            throw new InvalidOperationException("Please provide a valid connection string.");
 
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=SYSTEM;Database=api_db");
+        optionsBuilder.UseNpgsql(args[0]);
         return new PostgreDbContext(optionsBuilder.Options);
     }
 }
