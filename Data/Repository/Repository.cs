@@ -94,9 +94,21 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
         return operationResult;
     }
 
-    public Task<OperationResult<IEnumerable<T>>> GetManyAsync(IEnumerable<Expression<Func<T, bool>>> func, CancellationToken token)
+    public async Task<OperationResult<IEnumerable<T>>> GetManyAsync(IEnumerable<Expression<Func<T, bool>>> func, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var operationResult = new OperationResult<IEnumerable<T>>();
+
+        try
+        {
+            var result = await this._db.Set<T>().Filter(func).ToListAsync(token);
+            operationResult.Data = result;
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+        }
+
+        return operationResult;
     }
 
     public Task<OperationResult<bool>> AnyAsync(IEnumerable<Expression<Func<T, bool>>> func, CancellationToken token)
