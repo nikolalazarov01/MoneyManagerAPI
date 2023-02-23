@@ -18,16 +18,11 @@ public class UserService : IUserService
         _repository = repository;
     }
 
-    public async Task<OperationResult<User>> GetUserById(Guid id, CancellationToken token)
+    public async Task<OperationResult<User>> GetUserById(Guid id, IEnumerable<Func<IQueryable<User>, IQueryable<User>>> transforms, CancellationToken token)
     {
         var operationResult = new OperationResult<User>();
         try
         {
-            var transforms = new List<Func<IQueryable<User>, IQueryable<User>>>
-            {
-                u => u.Include(u => u.BaseCurrency)
-            };
-            
             var result =
                 await this._repository.GetAsync(new List<Expression<Func<User, bool>>> { u => u.Id == id },transforms, token);
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);

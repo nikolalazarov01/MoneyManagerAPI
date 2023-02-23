@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MoneyManager_API.Extensions;
 using MoneyManager_API.Validation;
 using Utilities;
@@ -36,8 +37,13 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetUserById(CancellationToken token)
     {
         var userId = await this.GetUserId();
+        
+        var transforms = new List<Func<IQueryable<User>, IQueryable<User>>>
+        {
+            u => u.Include(u => u.BaseCurrency)
+        };
 
-        var result = await this._services.Users.GetUserById(userId, token);
+        var result = await this._services.Users.GetUserById(userId, transforms, token);
         if (!result.IsSuccessful) return this.Error(result);
 
         var representation = _mapper.Map<UserDto>(result.Data);
