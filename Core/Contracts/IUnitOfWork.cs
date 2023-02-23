@@ -7,4 +7,5 @@ public interface IUnitOfWork
 {
     IUserService Users { get; }
     IAccountService Accounts { get; }
+    ICurrencyService Currencies { get; }
 }

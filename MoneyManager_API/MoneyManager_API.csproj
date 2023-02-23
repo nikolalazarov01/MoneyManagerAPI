@@ -25,10 +25,4 @@
       <ProjectReference Include="..\Utilities\Utilities.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Controllers" />
-      <Folder Include="MappingConfigs" />
-      <Folder Include="Validation" />
-    </ItemGroup>
-
 </Project>

@@ -1,6 +1,9 @@
-﻿namespace Core.Contracts;
+﻿using Data.Models;
+using Utilities;
 
-public class IUserService
+namespace Core.Contracts;
+
+public interface IUserService
 {
-    
+    Task<OperationResult<Currency>> SetUserBaseCurrency(Currency currency, Guid userId, CancellationToken token);
 }

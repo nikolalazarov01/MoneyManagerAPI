@@ -17,8 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration.GetSection(DatabaseConfiguration.Section).Get<DatabaseConfiguration>();
 builder.Services.SetupDatabase(configuration);
 
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<DbContext>();
+
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -35,7 +34,6 @@ builder.Services.AddAuthentication(x =>
     .AddJwtBearer(x => {
         x.RequireHttpsMetadata = false;
         x.SaveToken = true;
-        x.Authority = "https://localhost:7003/";
         x.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
@@ -63,6 +61,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
