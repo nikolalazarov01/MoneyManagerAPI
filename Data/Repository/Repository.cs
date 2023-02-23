@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Data.Extensions;
 using Data.Models.Contracts;
 using Data.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -76,9 +77,21 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
         return operationResult;
     }
 
-    public Task<OperationResult<T>> GetAsync(IEnumerable<Expression<Func<T, bool>>> func, CancellationToken token)
+    public async Task<OperationResult<T>> GetAsync(IEnumerable<Expression<Func<T, bool>>> func, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var operationResult = new OperationResult<T>();
+
+        try
+        {
+            var result = await this._db.Set<T>().Filter(func).FirstOrDefaultAsync(token);
+            operationResult.Data = result;
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+        }
+
+        return operationResult;
     }
 
     public Task<OperationResult<IEnumerable<T>>> GetManyAsync(IEnumerable<Expression<Func<T, bool>>> func, CancellationToken token)
