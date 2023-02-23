@@ -33,9 +33,23 @@ public class Repository<T> : IRepository<T> where T : class
         return operationResult;
     }
 
-    public Task<OperationResult> DeleteAsync(T entity, CancellationToken token)
+    public async Task<OperationResult> DeleteAsync(T entity, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var operationResult = new OperationResult();
+
+        if (operationResult.ValidateNotNull(entity) == false) return operationResult;
+
+        try
+        {
+            this._db.Remove(entity);
+            await this._db.SaveChangesAsync(token);
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+        }
+
+        return operationResult;
     }
 
     public Task<OperationResult> UpdateAsync(T entity, CancellationToken token)
