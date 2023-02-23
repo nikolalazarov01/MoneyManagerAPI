@@ -3,10 +3,12 @@ using AutoMapper;
 using Core.Contracts;
 using Data.Models;
 using Data.Models.DTO;
+using Data.Models.DTO.Hateoas;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MoneyManager_API.Extensions;
 using MoneyManager_API.Validation;
@@ -39,6 +41,7 @@ public class UserController : ControllerBase
         if (!result.IsSuccessful) return this.Error(result);
 
         var representation = _mapper.Map<UserDto>(result.Data);
+        representation.Links = this.GetHateoasLinks();
 
         return Ok(representation);
     }
@@ -55,7 +58,7 @@ public class UserController : ControllerBase
         var result = await this.SetBaseCurrencyInternally(currencyDto, userId, cancellationToken);
         if (!result.IsSuccessful) return this.Error(result);
 
-        return Ok();
+        return CreatedAtAction("GetUserById", null, result.Data);
     }
     
     private async Task<ValidationResult> ValidateCurrencyAsync(BaseCurrencyDto currencyDto, CancellationToken token)
@@ -64,10 +67,10 @@ public class UserController : ControllerBase
         return await this._validatorCurrency.ValidateAsync(currencyDto, token);
     }
 
-    private async Task<OperationResult<BaseCurrencyDto>> SetBaseCurrencyInternally(BaseCurrencyDto currencyDto,
+    private async Task<OperationResult<UserDto>> SetBaseCurrencyInternally(BaseCurrencyDto currencyDto,
         Guid userId, CancellationToken token)
     {
-        var operationResult = new OperationResult<BaseCurrencyDto>();
+        var operationResult = new OperationResult<UserDto>();
         try
         {
             var result = await this._services.Currencies.GetCurrencyAsync(currencyDto, token);
@@ -91,7 +94,8 @@ public class UserController : ControllerBase
 
             if (!setCurrencyResult.IsSuccessful) return operationResult.AppendErrors(setCurrencyResult);
 
-            var representation = _mapper.Map<BaseCurrencyDto>(setCurrencyResult.Data);
+            var representation = _mapper.Map<UserDto>(setCurrencyResult.Data);
+            representation.Links = this.GetHateoasLinks();
             operationResult.Data = representation;
         }
         catch (Exception ex)
@@ -110,5 +114,29 @@ public class UserController : ControllerBase
         var userId = jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value;
         
         return Guid.Parse(userId);
+    }
+    
+    private IEnumerable<HateoasLink> GetHateoasLinks()
+    {
+        var links = new List<HateoasLink>()
+        {
+            new()
+            {
+                Url = this.AbsoluteUrl("GetUserById", "User", null), Method = HttpMethods.Get,
+                Rel = "self"
+            },
+            new()
+            {
+                Url = this.AbsoluteUrl("SetBaseCurrency", "User", null), Method = HttpMethods.Post,
+                Rel = "create"
+            }
+            /*new()
+            {
+                Url = this.AbsoluteUrl("GetById", "User", new { Id = user.Id }), Method = HttpMethods.Get,
+                Rel = "self"
+            }*/
+        };
+
+        return links;
     }
 }

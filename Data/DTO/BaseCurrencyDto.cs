@@ -2,7 +2,7 @@
 
 namespace Data.Models.DTO;
 
-public class BaseCurrencyDto
+public class BaseCurrencyDto : BaseDtoModel
 {
     public string Code { get; set; }
 }

@@ -41,9 +41,9 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<OperationResult<Currency>> SetUserBaseCurrency(Currency currency, Guid userId, CancellationToken token)
+    public async Task<OperationResult<User>> SetUserBaseCurrency(Currency currency, Guid userId, CancellationToken token)
     {
-        var operationResult = new OperationResult<Currency>();
+        var operationResult = new OperationResult<User>();
         try
         {
             var result =
@@ -69,7 +69,7 @@ public class UserService : IUserService
                 if (!createResult.IsSuccessful) return operationResult.AppendErrors(createResult);
             }
             
-            operationResult.Data = currency;
+            operationResult.Data = user;
         }
         catch (Exception ex)
         {
