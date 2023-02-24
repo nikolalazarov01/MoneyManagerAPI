@@ -32,15 +32,36 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("get-info")]
+    [HttpGet("{id:guid}")]
     [Authorize]
-    public async Task<IActionResult> GetUserById(CancellationToken token)
+    public async Task<IActionResult> GetUserById([FromRoute] Guid id, CancellationToken token)
+    {
+        if (id == Guid.Empty) return BadRequest();
+        
+        var transforms = new List<Func<IQueryable<User>, IQueryable<User>>>
+        {
+            u => u.Include(u => u.BaseCurrency)
+        };
+        
+        var result = await this._services.Users.GetUserById(id, transforms, token);
+        if (!result.IsSuccessful) return this.Error(result);
+
+        var representation = _mapper.Map<UserDto>(result.Data);
+        representation.Links = this.GetHateoasLinks();
+
+        return Ok(representation);
+    }
+    
+    [HttpGet("get-current-user")]
+    [Authorize]
+    public async Task<IActionResult> GetCurrentUser(CancellationToken token)
     {
         var userId = await this.GetUserId();
         
         var transforms = new List<Func<IQueryable<User>, IQueryable<User>>>
         {
-            u => u.Include(u => u.BaseCurrency)
+            u => u.Include(a => a.BaseCurrency),
+            u => u.Include(a => a.Accounts)
         };
 
         var result = await this._services.Users.GetUserById(userId, transforms, token);
@@ -64,7 +85,7 @@ public class UserController : ControllerBase
         var result = await this.SetBaseCurrencyInternally(currencyDto, userId, cancellationToken);
         if (!result.IsSuccessful) return this.Error(result);
 
-        return CreatedAtAction("GetUserById", null, result.Data);
+        return CreatedAtAction("GetCurrentUser", null, result.Data);
     }
     
     private async Task<ValidationResult> ValidateCurrencyAsync(BaseCurrencyDto currencyDto, CancellationToken token)
