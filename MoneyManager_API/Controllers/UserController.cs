@@ -132,17 +132,7 @@ public class UserController : ControllerBase
 
         return operationResult;
     }
-    
-    private async Task<Guid> GetUserId()
-    {
-        var token = await HttpContext.GetTokenAsync("access_token");
-        var handler = new JwtSecurityTokenHandler();
-        var jwt = handler.ReadJwtToken(token);
-        var userId = jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value;
-        
-        return Guid.Parse(userId);
-    }
-    
+
     private IEnumerable<HateoasLink> GetHateoasLinks()
     {
         var links = new List<HateoasLink>()

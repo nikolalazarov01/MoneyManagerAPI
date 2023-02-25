@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Utilities;
+using Microsoft.AspNetCore.Authentication;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace MoneyManager_API.Extensions;
@@ -40,5 +42,17 @@ public static class ControllerExtensions
 
         var request = controller.HttpContext.Request;
         return controller.Url.Action(actionName, controllerName, values, request.Scheme, request.Host.Value);
+    }
+    
+    public static async Task<Guid> GetUserId(this ControllerBase controller)
+    {
+        if (controller is null) throw new ArgumentNullException(nameof(controller));
+        
+        var token = await controller.HttpContext.GetTokenAsync("access_token");
+        var handler = new JwtSecurityTokenHandler();
+        var jwt = handler.ReadJwtToken(token);
+        var userId = jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value;
+        
+        return Guid.Parse(userId);
     }
 }

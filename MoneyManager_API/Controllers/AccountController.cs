@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MoneyManager_API.Controllers;
@@ -15,5 +16,12 @@ public class AccountController : ControllerBase
     {
         _services = services;
         _mapper = mapper;
+    }
+
+    [HttpPost("add")]
+    [Authorize]
+    public async Task<IActionResult> AddUserAccount()
+    {
+        
     }
 }
