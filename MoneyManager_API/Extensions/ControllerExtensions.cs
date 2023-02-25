@@ -49,10 +49,14 @@ public static class ControllerExtensions
         if (controller is null) throw new ArgumentNullException(nameof(controller));
         
         var token = await controller.HttpContext.GetTokenAsync("access_token");
+        if(token is null)
+            return Guid.Empty;
         var handler = new JwtSecurityTokenHandler();
         var jwt = handler.ReadJwtToken(token);
         var userId = jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value;
-        
-        return Guid.Parse(userId);
+
+        if (userId is not null)
+            return Guid.Parse(userId);
+        else return Guid.Empty;
     }
 }
