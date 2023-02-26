@@ -3,6 +3,7 @@ using Core.Contracts;
 using Data.Models;
 using Data.Models.DTO.Account;
 using Data.Repository.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Utilities;
 
 namespace Core.Services;
@@ -63,6 +64,34 @@ public class AccountService : IAccountService
 
             var result = await this._repository.DeleteAsync(account.Data, token);
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+        }
+
+        return operationResult;
+    }
+
+    public async Task<OperationResult<IEnumerable<Account>>> GetUserAccounts(Guid userId, CancellationToken token)
+    {
+        var operationResult = new OperationResult<IEnumerable<Account>>();
+        try
+        {
+            var funcs = new List<Expression<Func<Account, bool>>>
+            {
+                a => a.UserId == userId
+            };
+            var transforms = new List<Func<IQueryable<Account>, IQueryable<Account>>>
+            {
+                a => a.Include(ac => ac.Currency)
+            };
+
+
+            var result = await this._repository.GetManyAsync(funcs, transforms, token);
+            if (!result.IsSuccessful) return operationResult.AppendErrors(result);
+
+            operationResult.Data = result.Data;
         }
         catch (Exception ex)
         {

@@ -7,4 +7,5 @@ public interface IAccountService
 {
     Task<OperationResult<Account>> AddNewAccountAsync(User user, Account account, CancellationToken token);
     Task<OperationResult> DeleteAccountAsync(Guid id, CancellationToken token);
+    Task<OperationResult<IEnumerable<Account>>> GetUserAccounts(Guid userId, CancellationToken token);
 }
