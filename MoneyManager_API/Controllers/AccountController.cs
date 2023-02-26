@@ -32,7 +32,7 @@ public class AccountController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("remove/{id:guid}")]
+    [HttpDelete("{id:guid}")]
     [Authorize]
     public async Task<IActionResult> RemoveById([FromRoute] Guid id, CancellationToken token)
     {
