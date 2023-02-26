@@ -11,5 +11,6 @@ public class AccountMappingsConfig : Profile
         this.CreateMap<NewAccountCreatedDto, Account>().ReverseMap();
         this.CreateMap<NewAccountRequestDto, Account>().ReverseMap();
         this.CreateMap<UserAccountDto, Account>().ReverseMap();
+        this.CreateMap<AccountDto, Account>().ReverseMap();
     }
 }

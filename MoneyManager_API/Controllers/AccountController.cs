@@ -43,8 +43,12 @@ public class AccountController : ControllerBase
         var result = await this._services.Accounts.GetUserAccounts(userId, token);
         if (!result.IsSuccessful) return this.Error(result);
 
-        var representation = this._mapper.Map<IEnumerable<UserAccountDto>>(result.Data);
-
+        var representation = this._mapper.Map<IEnumerable<AccountDto>>(result.Data);
+        foreach (var accountDto in representation)
+        {
+            accountDto.Links = this.GetHateoasLinks(accountDto.Id);
+        }
+        
         return Ok(representation);
     }
     
@@ -130,6 +134,11 @@ public class AccountController : ControllerBase
             {
                 Url = this.AbsoluteUrl("GetAccountById", "Account", new {Id = accountId}), Method = HttpMethods.Get,
                 Rel = "self"
+            },
+            new()
+            {
+                Url = this.AbsoluteUrl("RemoveById", "Account", new {Id = accountId}), Method = HttpMethods.Delete,
+                Rel = "delete"
             }
         };
 
