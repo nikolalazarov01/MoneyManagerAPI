@@ -43,7 +43,9 @@ public class AccountController : ControllerBase
         var result = await this._services.Accounts.GetUserAccounts(userId, token);
         if (!result.IsSuccessful) return this.Error(result);
 
-        return Ok(result.Data);
+        var representation = this._mapper.Map<IEnumerable<UserAccountDto>>(result.Data);
+
+        return Ok(representation);
     }
     
     [HttpDelete("{id:guid}")]
