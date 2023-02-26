@@ -1,7 +1,10 @@
-﻿namespace Data.Models.DTO.Account;
+﻿using Data.Models.DTO.Base;
 
-public class NewAccountCreatedDto
+namespace Data.Models.DTO.Account;
+
+public class NewAccountCreatedDto : BaseDtoModel
 {
+    public Guid Id { get; set; }
     public CurrencyDto Currency { get; set; }
     public Guid UserId { get; set; }
     public double Total { get; set; }

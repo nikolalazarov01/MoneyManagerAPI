@@ -2,6 +2,7 @@
 using Core.Contracts;
 using Data.Models;
 using Data.Models.DTO.Account;
+using Data.Models.DTO.Hateoas;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,13 @@ public class AccountController : ControllerBase
         _mapper = mapper;
     }
 
+    [HttpGet("{id:guid}")]
+    [Authorize]
+    public async Task<IActionResult> GetAccountById([FromRoute] Guid id, CancellationToken token)
+    {
+        return Ok();
+    }
+    
     [HttpPost("add")]
     [Authorize]
     public async Task<IActionResult> AddUserAccount([FromBody] NewAccountRequestDto accountRequestDto, CancellationToken token)
@@ -35,7 +43,7 @@ public class AccountController : ControllerBase
         if (!result.IsSuccessful) return this.Error(result);
         
         //to do - make it CreatedAtAction
-        return Ok(result);
+        return CreatedAtAction("GetAccountById", new {Id = result.Data.Id}, result.Data);
     }
 
     private async Task<OperationResult<NewAccountCreatedDto>> CreateAccountAsync(NewAccountRequestDto accountRequestDto, Guid userId, CancellationToken token)
@@ -56,6 +64,7 @@ public class AccountController : ControllerBase
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
 
             var representation = this._mapper.Map<NewAccountCreatedDto>(result.Data);
+            representation.Links = this.GetHateoasLinks(representation.Id);
             operationResult.Data = representation;
         }
         catch (Exception ex)
@@ -64,5 +73,19 @@ public class AccountController : ControllerBase
         }
 
         return operationResult;
+    }
+    
+    private IEnumerable<HateoasLink> GetHateoasLinks(Guid accountId)
+    {
+        var links = new List<HateoasLink>()
+        {
+            new()
+            {
+                Url = this.AbsoluteUrl("GetAccountById", "Account", new {Id = accountId}), Method = HttpMethods.Get,
+                Rel = "self"
+            }
+        };
+
+        return links;
     }
 }
