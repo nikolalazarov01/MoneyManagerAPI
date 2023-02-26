@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace MoneyManager_API.Validation;
 
-public class CurrencyValidator : AbstractValidator<BaseCurrencyDto>
+public class CurrencyValidator : AbstractValidator<CurrencyDto>
 {
     public CurrencyValidator()
     {

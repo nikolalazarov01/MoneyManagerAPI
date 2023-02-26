@@ -2,5 +2,5 @@
 
 public class NewAccountRequestDto
 {
-    
+    public CurrencyDto Currency { get; set; }
 }

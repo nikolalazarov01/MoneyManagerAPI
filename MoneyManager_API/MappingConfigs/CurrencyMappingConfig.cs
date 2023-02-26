@@ -8,6 +8,6 @@ public class CurrencyMappingConfig : Profile
 {
     public CurrencyMappingConfig()
     {
-        this.CreateMap<BaseCurrencyDto, Currency>().ReverseMap();
+        this.CreateMap<CurrencyDto, Currency>().ReverseMap();
     }
 }

@@ -6,5 +6,5 @@ namespace Core.Contracts;
 
 public interface ICurrencyService
 {
-    Task<OperationResult<Currency>> GetCurrencyAsync(BaseCurrencyDto currencyDto, CancellationToken token);
+    Task<OperationResult<Currency>> GetCurrencyAsync(CurrencyDto currencyDto, CancellationToken token);
 }

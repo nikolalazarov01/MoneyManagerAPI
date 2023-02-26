@@ -22,10 +22,10 @@ namespace MoneyManager_API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUnitOfWork _services;
-    private readonly IValidator<BaseCurrencyDto> _validatorCurrency;
+    private readonly IValidator<CurrencyDto> _validatorCurrency;
     private readonly IMapper _mapper;
 
-    public UserController(IUnitOfWork services, IValidator<BaseCurrencyDto> validatorCurrency, IMapper mapper)
+    public UserController(IUnitOfWork services, IValidator<CurrencyDto> validatorCurrency, IMapper mapper)
     {
         _services = services;
         _validatorCurrency = validatorCurrency;
@@ -75,7 +75,7 @@ public class UserController : ControllerBase
     
     [HttpPost("base-currency")]
     [Authorize]
-    public async Task<IActionResult> SetBaseCurrency([FromBody] BaseCurrencyDto currencyDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> SetBaseCurrency([FromBody] CurrencyDto currencyDto, CancellationToken cancellationToken)
     {
         var validationResult = await this.ValidateCurrencyAsync(currencyDto, cancellationToken);
         if (!validationResult.IsValid) return this.ValidationError(validationResult);
@@ -88,13 +88,13 @@ public class UserController : ControllerBase
         return CreatedAtAction("GetCurrentUser", null, result.Data);
     }
     
-    private async Task<ValidationResult> ValidateCurrencyAsync(BaseCurrencyDto currencyDto, CancellationToken token)
+    private async Task<ValidationResult> ValidateCurrencyAsync(CurrencyDto currencyDto, CancellationToken token)
     {
         if (this._validatorCurrency is null) return null;
         return await this._validatorCurrency.ValidateAsync(currencyDto, token);
     }
 
-    private async Task<OperationResult<UserDto>> SetBaseCurrencyInternally(BaseCurrencyDto currencyDto,
+    private async Task<OperationResult<UserDto>> SetBaseCurrencyInternally(CurrencyDto currencyDto,
         Guid userId, CancellationToken token)
     {
         var operationResult = new OperationResult<UserDto>();

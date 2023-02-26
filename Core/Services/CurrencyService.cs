@@ -16,7 +16,7 @@ public class CurrencyService : ICurrencyService
         _repository = repository;
     }
 
-    public async Task<OperationResult<Currency>> GetCurrencyAsync(BaseCurrencyDto currencyDto, CancellationToken token)
+    public async Task<OperationResult<Currency>> GetCurrencyAsync(CurrencyDto currencyDto, CancellationToken token)
     {
         var operationResult = new OperationResult<Currency>();
         try
