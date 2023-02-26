@@ -46,7 +46,7 @@ public class AccountController : ControllerBase
         return NoContent();
     }
     
-    [HttpPost("add")]
+    [HttpPost]
     [Authorize]
     public async Task<IActionResult> AddUserAccount([FromBody] NewAccountRequestDto accountRequestDto, CancellationToken token)
     {
