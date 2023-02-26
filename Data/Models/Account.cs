@@ -9,6 +9,8 @@ public class Account : IEntity
     [Key]
     public Guid Id { get; set; }
     
+    public string Name { get; set; }
+    
     [ForeignKey("Currency")]
     public Guid CurrencyId { get; set; }
     public Currency Currency { get; set; }
