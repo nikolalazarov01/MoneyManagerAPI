@@ -48,6 +48,15 @@ public class AccountController : ControllerBase
                 u => u.Include(a => a.Accounts)
             };
             var user = await this._services.Users.GetUserById(userId, transforms, token);
+            if (!user.IsSuccessful) return operationResult.AppendErrors(user);
+
+            var account = this._mapper.Map<Account>(accountRequestDto);
+            var result = await this._services.Accounts.AddNewAccount(user.Data, account, token);
+
+            if (!result.IsSuccessful) return operationResult.AppendErrors(result);
+
+            var representation = this._mapper.Map<NewAccountCreatedDto>(result.Data);
+            operationResult.Data = representation;
         }
         catch (Exception ex)
         {
