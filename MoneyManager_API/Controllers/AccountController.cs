@@ -32,6 +32,20 @@ public class AccountController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("user-accounts")]
+    [Authorize]
+    public async Task<IActionResult> GetUserAccounts(CancellationToken token)
+    {
+        var userId = await this.GetUserId();
+        if (userId == Guid.Empty)
+            return BadRequest();
+
+        var result = await this._services.Accounts.GetUserAccounts(userId, token);
+        if (!result.IsSuccessful) return this.Error(result);
+
+        return Ok(result.Data);
+    }
+    
     [HttpDelete("{id:guid}")]
     [Authorize]
     public async Task<IActionResult> RemoveById([FromRoute] Guid id, CancellationToken token)
