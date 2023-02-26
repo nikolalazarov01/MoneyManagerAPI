@@ -47,7 +47,7 @@ public class UserController : ControllerBase
         if (!result.IsSuccessful) return this.Error(result);
 
         var representation = _mapper.Map<UserDto>(result.Data);
-        representation.Links = this.GetHateoasLinks();
+        representation.Links = this.GetHateoasLinks(result.Data.Id);
 
         return Ok(representation);
     }
@@ -57,18 +57,18 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetCurrentUser(CancellationToken token)
     {
         var userId = await this.GetUserId();
-        
+
         var transforms = new List<Func<IQueryable<User>, IQueryable<User>>>
         {
             u => u.Include(a => a.BaseCurrency),
-            u => u.Include(a => a.Accounts)
+            u => u.Include(a => a.Accounts).ThenInclude(ac => ac.Currency)
         };
 
         var result = await this._services.Users.GetUserById(userId, transforms, token);
         if (!result.IsSuccessful) return this.Error(result);
 
         var representation = _mapper.Map<UserDto>(result.Data);
-        representation.Links = this.GetHateoasLinks();
+        representation.Links = this.GetHateoasLinks(result.Data.Id);
 
         return Ok(representation);
     }
@@ -122,7 +122,7 @@ public class UserController : ControllerBase
             if (!setCurrencyResult.IsSuccessful) return operationResult.AppendErrors(setCurrencyResult);
 
             var representation = _mapper.Map<UserDto>(setCurrencyResult.Data);
-            representation.Links = this.GetHateoasLinks();
+            representation.Links = this.GetHateoasLinks(setCurrencyResult.Data.Id);
             operationResult.Data = representation;
         }
         catch (Exception ex)
@@ -133,25 +133,25 @@ public class UserController : ControllerBase
         return operationResult;
     }
 
-    private IEnumerable<HateoasLink> GetHateoasLinks()
+    private IEnumerable<HateoasLink> GetHateoasLinks(Guid id)
     {
         var links = new List<HateoasLink>()
         {
             new()
             {
-                Url = this.AbsoluteUrl("GetUserById", "User", null), Method = HttpMethods.Get,
+                Url = this.AbsoluteUrl("GetCurrentUser", "User", null), Method = HttpMethods.Get,
                 Rel = "self"
             },
             new()
             {
                 Url = this.AbsoluteUrl("SetBaseCurrency", "User", null), Method = HttpMethods.Post,
                 Rel = "create"
-            }
-            /*new()
+            },
+            new()
             {
-                Url = this.AbsoluteUrl("GetById", "User", new { Id = user.Id }), Method = HttpMethods.Get,
+                Url = this.AbsoluteUrl("GetUserById", "User", new { Id = id }), Method = HttpMethods.Get,
                 Rel = "self"
-            }*/
+            }
         };
 
         return links;
