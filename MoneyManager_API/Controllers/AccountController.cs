@@ -42,7 +42,6 @@ public class AccountController : ControllerBase
         var result = await this.CreateAccountAsync(accountRequestDto, userId, token);
         if (!result.IsSuccessful) return this.Error(result);
         
-        //to do - make it CreatedAtAction
         return CreatedAtAction("GetAccountById", new {Id = result.Data.Id}, result.Data);
     }
 
