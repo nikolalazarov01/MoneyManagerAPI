@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Runtime.CompilerServices;
+using AutoMapper;
 using Core.Contracts;
 using Data.Models;
 using Data.Models.DTO.Account;
@@ -30,6 +31,20 @@ public class AccountController : ControllerBase
     {
         return Ok();
     }
+
+    [HttpDelete("remove/{id:guid}")]
+    [Authorize]
+    public async Task<IActionResult> RemoveById([FromRoute] Guid id, CancellationToken token)
+    {
+        var userId = await this.GetUserId();
+        if (userId == Guid.Empty)
+            return BadRequest();
+
+        var result = await this.DeleteAccount(id, token);
+        if (!result.IsSuccessful) return this.Error(result);
+
+        return NoContent();
+    }
     
     [HttpPost("add")]
     [Authorize]
@@ -58,7 +73,7 @@ public class AccountController : ControllerBase
             if (!user.IsSuccessful) return operationResult.AppendErrors(user);
 
             var account = this._mapper.Map<Account>(accountRequestDto);
-            var result = await this._services.Accounts.AddNewAccount(user.Data, account, token);
+            var result = await this._services.Accounts.AddNewAccountAsync(user.Data, account, token);
 
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
 
@@ -73,7 +88,24 @@ public class AccountController : ControllerBase
 
         return operationResult;
     }
-    
+
+    private async Task<OperationResult> DeleteAccount(Guid accountId, CancellationToken token)
+    {
+        var operationResult = new OperationResult();
+
+        try
+        {
+            var result = await this._services.Accounts.DeleteAccountAsync(accountId, token);
+            if (!result.IsSuccessful) return operationResult.AppendErrors(result);
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+        }
+
+        return operationResult;
+    }
+
     private IEnumerable<HateoasLink> GetHateoasLinks(Guid accountId)
     {
         var links = new List<HateoasLink>()
