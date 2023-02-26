@@ -1,4 +1,5 @@
-﻿using Core.Contracts;
+﻿using System.Linq.Expressions;
+using Core.Contracts;
 using Data.Models;
 using Data.Models.DTO.Account;
 using Data.Repository.Contracts;
@@ -15,7 +16,7 @@ public class AccountService : IAccountService
         _repository = repository;
     }
 
-    public async Task<OperationResult<Account>> AddNewAccount(User user, Account account, CancellationToken token)
+    public async Task<OperationResult<Account>> AddNewAccountAsync(User user, Account account, CancellationToken token)
     {
         var operationResult = new OperationResult<Account>();
         try
@@ -33,6 +34,35 @@ public class AccountService : IAccountService
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
 
             operationResult.Data = account;
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+        }
+
+        return operationResult;
+    }
+
+    public async Task<OperationResult> DeleteAccountAsync(Guid id, CancellationToken token)
+    {
+        var operationResult = new OperationResult();
+
+        try
+        {
+            var funcs = new List<Expression<Func<Account, bool>>>
+            {
+                a => a.Id == id
+            };
+            var account = await this._repository.GetAsync(funcs, null, token);
+            if (!account.IsSuccessful) return operationResult.AppendErrors(account);
+            if (account.Data is null)
+            {
+                operationResult.AddError(new Error
+                    { IsNotExpected = true, Message = "Account data not found!" });
+            }
+
+            var result = await this._repository.DeleteAsync(account.Data, token);
+            if (!result.IsSuccessful) return operationResult.AppendErrors(result);
         }
         catch (Exception ex)
         {
