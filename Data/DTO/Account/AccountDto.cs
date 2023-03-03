@@ -7,6 +7,6 @@ public class AccountDto : BaseDtoModel
     public Guid Id { get; set; }
     public string Name { get; set; }
     public CurrencyDto Currency { get; set; }
-    public ICollection<AccountInfo>? AccountInfos { get; set; }
+    public ICollection<AccountInfoDto>? AccountInfos { get; set; }
     public double Total { get; set; }
 }
