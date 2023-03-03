@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using AutoMapper;
 using Core.Contracts;
 using Data.Models;
@@ -29,7 +30,25 @@ public class AccountController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetAccountById([FromRoute] Guid id, CancellationToken token)
     {
-        return Ok();
+        var userId = await this.GetUserId();
+
+        var filters = new List<Expression<Func<Account, bool>>>
+        {
+            a => a.Id == id
+        };
+        var transformations = new List<Func<IQueryable<Account>, IQueryable<Account>>>
+        {
+            a => a.Include(ac => ac.Currency),
+            a => a.Include(ac => ac.AccountInfos)
+        };
+
+        var result = await this._services.Accounts.GetAccount(filters, transformations, token);
+        if (!result.IsSuccessful) return this.Error(result);
+
+        if (result.Data.UserId != userId)
+            return BadRequest("No access to different user's accounts!");
+        
+        return Ok(result.Data);
     }
 
     [HttpGet("user-accounts")]
