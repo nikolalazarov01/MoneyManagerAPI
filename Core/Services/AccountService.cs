@@ -23,6 +23,15 @@ public class AccountService : IAccountService
         var operationResult = new OperationResult<bool>();
         try
         {
+            var type = this.GetAccountInfoType(accountInfoDto.Type);
+            if (!type.IsSuccessful) return operationResult.AppendErrors(type);
+            
+            if (type.Data is AccountInfoType.Income)
+            {
+                operationResult.Data = true;
+                return operationResult;
+            }
+            
             var filters = new List<Expression<Func<Account, bool>>>
             {
                 a => a.Id == accountInfoDto.AccountId,
