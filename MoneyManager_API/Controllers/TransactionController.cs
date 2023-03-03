@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using AutoMapper;
 using Core.Contracts;
 using Data.Models.DTO.Account;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +10,7 @@ using MoneyManager_API.Extensions;
 namespace MoneyManager_API.Controllers;
 
 [ApiController]
+[Route("/transaction")]
 public class TransactionController : ControllerBase
 {
     private readonly IUnitOfWork _services;
