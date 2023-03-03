@@ -17,6 +17,25 @@ public class AccountService : IAccountService
         _repository = repository;
     }
 
+    public async Task<OperationResult<Account>> GetAccount(IEnumerable<Expression<Func<Account, bool>>> filters,
+        IEnumerable<Func<IQueryable<Account>, IQueryable<Account>>> transformations, CancellationToken token)
+    {
+        var operationResult = new OperationResult<Account>();
+        try
+        {
+            var result = await this._repository.GetAsync(filters, transformations, token);
+            if (!result.IsSuccessful) return operationResult.AppendErrors(result);
+
+            operationResult.Data = result.Data;
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+        }
+
+        return operationResult;
+    }
+    
     public async Task<OperationResult<Account>> AddNewAccountAsync(User user, Account account, CancellationToken token)
     {
         var operationResult = new OperationResult<Account>();
