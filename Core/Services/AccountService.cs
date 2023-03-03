@@ -18,9 +18,9 @@ public class AccountService : IAccountService
         _repository = repository;
     }
 
-    public async Task<OperationResult<bool>> ValidateTransaction(AccountInfoRequestDto accountInfoDto, CancellationToken token)
+    public async Task<OperationResult> ValidateTransaction(AccountInfoRequestDto accountInfoDto, CancellationToken token)
     {
-        var operationResult = new OperationResult<bool>();
+        var operationResult = new OperationResult();
         try
         {
             var type = this.GetAccountInfoType(accountInfoDto.Type);
@@ -28,7 +28,6 @@ public class AccountService : IAccountService
             
             if (type.Data is AccountInfoType.Income)
             {
-                operationResult.Data = true;
                 return operationResult;
             }
             
@@ -40,7 +39,11 @@ public class AccountService : IAccountService
             var result = await this._repository.AnyAsync(filters, token);
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
 
-            operationResult.Data = result.Data;
+            if (!result.Data)
+            {
+                operationResult.AddError(new Error
+                    { Message = "Not enough money in the account to make the transaction!" });
+            }
         }
         catch (Exception ex)
         {
@@ -73,7 +76,7 @@ public class AccountService : IAccountService
             {
                 Account = account,
                 Total = accountInfoDto.Total,
-                Date = DateTime.Today
+                Date = DateTime.Today.ToUniversalTime()
             };
             var parsedType = this.GetAccountInfoType(accountInfoDto.Type);
             if (!parsedType.IsSuccessful) return operationResult.AppendErrors(parsedType);
@@ -92,8 +95,13 @@ public class AccountService : IAccountService
                 default: break;
             }
 
-            var result = await this._repository.UpdateAsync(account, token);
+            var updateResult = await this._repository.UpdateAsync(account, token);
+            if (!updateResult.IsSuccessful) return operationResult.AppendErrors(updateResult);
+
+            var result = await this._repository.GetAsync(filters, transformations, token);
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
+            
+            operationResult.Data = result.Data;
         }
         catch (Exception ex)
         {
@@ -189,7 +197,8 @@ public class AccountService : IAccountService
             };
             var transforms = new List<Func<IQueryable<Account>, IQueryable<Account>>>
             {
-                a => a.Include(ac => ac.Currency)
+                a => a.Include(ac => ac.Currency),
+                a => a.Include(ac => ac.AccountInfos)
             };
 
 
