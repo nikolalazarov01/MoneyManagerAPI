@@ -3,6 +3,7 @@ using Core.Contracts;
 using Data.Models;
 using Data.Models.DTO.Account;
 using Data.Repository.Contracts;
+using Data.Utils;
 using Microsoft.EntityFrameworkCore;
 using Utilities;
 
@@ -15,6 +16,82 @@ public class AccountService : IAccountService
     public AccountService(IRepository<Account> repository)
     {
         _repository = repository;
+    }
+
+    public async Task<OperationResult<bool>> ValidateTransaction(AccountInfoRequestDto accountInfoDto, CancellationToken token)
+    {
+        var operationResult = new OperationResult<bool>();
+        try
+        {
+            var filters = new List<Expression<Func<Account, bool>>>
+            {
+                a => a.Id == accountInfoDto.AccountId,
+                a => a.Total > accountInfoDto.Total
+            };
+            var result = await this._repository.AnyAsync(filters, token);
+            if (!result.IsSuccessful) return operationResult.AppendErrors(result);
+
+            operationResult.Data = result.Data;
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+        }
+
+        return operationResult;
+    }
+
+    public async Task<OperationResult<Account>> MakeTransaction(AccountInfoRequestDto accountInfoDto, CancellationToken token)
+    {
+        var operationResult = new OperationResult<Account>();
+        try
+        {
+            var filters = new List<Expression<Func<Account, bool>>>
+            {
+                a => a.Id == accountInfoDto.AccountId
+            };
+            var transformations = new List<Func<IQueryable<Account>, IQueryable<Account>>>
+            {
+                a => a.Include(ac => ac.AccountInfos)
+            };
+
+            var accountResult = await this._repository.GetAsync(filters, transformations, token);
+            if (!accountResult.IsSuccessful) return operationResult.AppendErrors(accountResult);
+
+            var account = accountResult.Data;
+
+            var accountInfo = new AccountInfo
+            {
+                Account = account,
+                Total = accountInfoDto.Total,
+                Date = DateTime.Today
+            };
+            var parsedType = this.GetAccountInfoType(accountInfoDto.Type);
+            if (!parsedType.IsSuccessful) return operationResult.AppendErrors(parsedType);
+
+            accountInfo.Type = parsedType.Data;
+
+            account.AccountInfos.Add(accountInfo);
+            switch (parsedType.Data)
+            {
+                case AccountInfoType.Income:
+                    account.Total += accountInfoDto.Total;
+                    break;
+                case AccountInfoType.Outcome:
+                    account.Total -= accountInfoDto.Total;
+                    break;
+                default: break;
+            }
+
+            var result = await this._repository.UpdateAsync(account, token);
+            if (!result.IsSuccessful) return operationResult.AppendErrors(result);
+        }
+        catch (Exception ex)
+        {
+            operationResult.AppendException(ex);
+        }
+
+        return operationResult;
     }
 
     public async Task<OperationResult<Account>> GetAccount(IEnumerable<Expression<Func<Account, bool>>> filters,
@@ -117,6 +194,32 @@ public class AccountService : IAccountService
             operationResult.AppendException(ex);
         }
 
+        return operationResult;
+    }
+
+    private OperationResult<AccountInfoType> GetAccountInfoType(string typeToParse)
+    {
+        var operationResult = new OperationResult<AccountInfoType>();
+        AccountInfoType parsedType = AccountInfoType.Income;
+        bool hasParsed = false;
+
+        foreach (AccountInfoType type in Enum.GetValues(typeof(AccountInfoType)))
+        {
+            if (type.ToString() == typeToParse)
+            {
+                hasParsed = true;
+                parsedType = type;
+            }
+        }
+
+        if (!hasParsed)
+        {
+            operationResult.AddError(new Error { Message = "Invalid transaction type!" });
+        }
+        else
+        {
+            operationResult.Data = parsedType;
+        }
         return operationResult;
     }
 }
