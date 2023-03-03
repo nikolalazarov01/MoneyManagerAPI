@@ -48,6 +48,9 @@ public class AccountController : ControllerBase
         if (result.Data.UserId != userId)
             return BadRequest("No access to different user's accounts!");
         
+        var representation = this._mapper.Map<AccountDto>(result.Data);
+        representation.Links = this.GetHateoasLinks(result.Data.Id);
+        
         return Ok(result.Data);
     }
 
