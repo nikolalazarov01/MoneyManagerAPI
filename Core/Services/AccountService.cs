@@ -214,7 +214,7 @@ public class AccountService : IAccountService
 
         foreach (AccountInfoType type in Enum.GetValues(typeof(AccountInfoType)))
         {
-            if (type.ToString() == typeToParse)
+            if (type.ToString().ToLowerInvariant() == typeToParse.ToLowerInvariant())
             {
                 hasParsed = true;
                 parsedType = type;
