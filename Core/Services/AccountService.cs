@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Core.Contracts;
+using Core.Contracts.Options;
 using Data.Models;
 using Data.Models.DTO.Account;
 using Data.Repository.Contracts;
@@ -111,13 +112,12 @@ public class AccountService : IAccountService
         return operationResult;
     }
 
-    public async Task<OperationResult<Account>> GetAccount(IEnumerable<Expression<Func<Account, bool>>> filters,
-        IEnumerable<Func<IQueryable<Account>, IQueryable<Account>>> transformations, CancellationToken token)
+    public async Task<OperationResult<Account>> GetAccount(IQueryOptions<Account> queryOptions, CancellationToken token)
     {
         var operationResult = new OperationResult<Account>();
         try
         {
-            var result = await this._repository.GetAsync(filters, transformations, token);
+            var result = await this._repository.GetAsync(queryOptions.Filters, queryOptions.Transformations, token);
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
 
             operationResult.Data = result.Data;

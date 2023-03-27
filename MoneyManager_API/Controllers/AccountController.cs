@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using AutoMapper;
 using Core.Contracts;
+using Core.Options;
 using Data.Models;
 using Data.Models.DTO.Account;
 using Data.Models.DTO.Hateoas;
@@ -31,18 +32,14 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> GetAccountById([FromRoute] Guid id, CancellationToken token)
     {
         var userId = await this.GetUserId();
+        var queryOptions = new QueryOptions<Account>();
+        
+        queryOptions.AddFilter(a => a.Id == id);
+        
+        queryOptions.AddTransformation(a => a.Include(ac => ac.Currency));
+        queryOptions.AddTransformation(a => a.Include(ac => ac.AccountInfos));
 
-        var filters = new List<Expression<Func<Account, bool>>>
-        {
-            a => a.Id == id
-        };
-        var transformations = new List<Func<IQueryable<Account>, IQueryable<Account>>>
-        {
-            a => a.Include(ac => ac.Currency),
-            a => a.Include(ac => ac.AccountInfos)
-        };
-
-        var result = await this._services.Accounts.GetAccount(filters, transformations, token);
+        var result = await this._services.Accounts.GetAccount(queryOptions, token);
         if (!result.IsSuccessful) return this.Error(result);
 
         if (result.Data.UserId != userId)
