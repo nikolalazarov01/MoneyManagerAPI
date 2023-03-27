@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Core.Contracts;
+using Core.Contracts.Options;
 using Data.Models;
 using Data.Models.DTO;
 using Data.Repository.Contracts;
@@ -16,16 +17,12 @@ public class CurrencyService : ICurrencyService
         _repository = repository;
     }
 
-    public async Task<OperationResult<Currency>> GetCurrencyAsync(CurrencyDto currencyDto, CancellationToken token)
+    public async Task<OperationResult<Currency>> GetCurrencyAsync(IQueryOptions<Currency> queryOptions, CancellationToken token)
     {
         var operationResult = new OperationResult<Currency>();
         try
         {
-            var result = await this._repository.GetAsync(new List<Expression<Func<Currency, bool>>>
-            {
-                c =>
-                    c.Code.ToLower() == currencyDto.Code.ToLower()
-            },null, token);
+            var result = await this._repository.GetAsync(queryOptions.Filters,queryOptions.Transformations, token);
 
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
 

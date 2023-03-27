@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
 using Core.Contracts;
+using Core.Options;
 using Data.Models;
 using Data.Models.DTO;
 using Data.Models.DTO.Hateoas;
@@ -100,7 +101,10 @@ public class UserController : ControllerBase
         var operationResult = new OperationResult<UserDto>();
         try
         {
-            var result = await this._services.Currencies.GetCurrencyAsync(currencyDto, token);
+            var queryOptions = new QueryOptions<Currency>();
+            queryOptions.AddFilter(c => c.Code.ToLower() == currencyDto.Code.ToLower());
+
+            var result = await this._services.Currencies.GetCurrencyAsync(queryOptions, token);
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
 
             Currency currency;
