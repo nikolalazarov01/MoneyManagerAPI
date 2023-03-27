@@ -5,7 +5,7 @@ using Data.Utils;
 
 namespace Data.Models;
 
-public class AccountInfo : IEntity
+public class TransactionInfo : IEntity
 {
     [Key]
     public Guid Id { get; set; }
@@ -14,7 +14,7 @@ public class AccountInfo : IEntity
     public Guid AccountId { get; set; }
     public Account Account { get; set; }
     
-    public AccountInfoType Type { get; set; }
+    public TransactionInfoType Type { get; set; }
     
     public double Total { get; set; }
     

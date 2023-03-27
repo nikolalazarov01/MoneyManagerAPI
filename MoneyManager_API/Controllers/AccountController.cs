@@ -37,7 +37,7 @@ public class AccountController : ControllerBase
         queryOptions.AddFilter(a => a.Id == id);
         
         queryOptions.AddTransformation(a => a.Include(ac => ac.Currency));
-        queryOptions.AddTransformation(a => a.Include(ac => ac.AccountInfos));
+        queryOptions.AddTransformation(a => a.Include(ac => ac.TransactionInfos));
 
         var result = await this._services.Accounts.GetAccount(queryOptions, token);
         if (!result.IsSuccessful) return this.Error(result);

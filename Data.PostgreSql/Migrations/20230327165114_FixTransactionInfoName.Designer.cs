@@ -3,6 +3,7 @@ using System;
 using Data.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.PostgreSql.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    partial class PostgreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230327165114_FixTransactionInfoName")]
+    partial class FixTransactionInfoName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +116,7 @@ namespace Data.PostgreSql.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("TransactionInfos");
+                    b.ToTable("AccountInfos");
                 });
 
             modelBuilder.Entity("Data.Models.User", b =>

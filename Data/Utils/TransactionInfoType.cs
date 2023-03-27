@@ -1,6 +1,6 @@
 ﻿namespace Data.Utils;
 
-public enum AccountInfoType
+public enum TransactionInfoType
 {
     Income,
     Outcome

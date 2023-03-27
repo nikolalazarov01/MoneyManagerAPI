@@ -13,6 +13,6 @@ public class AccountMappingsConfig : Profile
         this.CreateMap<UserAccountDto, Account>().ReverseMap();
         this.CreateMap<AccountDto, Account>().ReverseMap();
 
-        this.CreateMap<AccountInfoDto, AccountInfo>().ReverseMap();
+        this.CreateMap<AccountInfoDto, TransactionInfo>().ReverseMap();
     }
 }

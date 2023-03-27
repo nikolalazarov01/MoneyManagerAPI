@@ -12,7 +12,7 @@ public class BaseDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Account> Accounts { get; set; }
-    public DbSet<AccountInfo> AccountInfos { get; set; }
+    public DbSet<TransactionInfo> TransactionInfos { get; set; }
     public DbSet<Currency> Currencies { get; set; }
     public DbSet<CurrencyInfo> CurrencyInfos { get; set; }
 
@@ -40,12 +40,12 @@ public class BaseDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Account>()
-            .HasMany(a => a.AccountInfos)
+            .HasMany(a => a.TransactionInfos)
             .WithOne(ai => ai.Account);
 
-        modelBuilder.Entity<AccountInfo>()
+        modelBuilder.Entity<TransactionInfo>()
             .HasOne(ai => ai.Account)
-            .WithMany(a => a.AccountInfos)
+            .WithMany(a => a.TransactionInfos)
             .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Currency>()

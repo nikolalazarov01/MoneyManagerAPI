@@ -19,13 +19,13 @@ public class Account : IEntity
     public Guid UserId { get; set; }
     public User User { get; set; }
     
-    public ICollection<AccountInfo>? AccountInfos { get; set; }
+    public ICollection<TransactionInfo>? TransactionInfos { get; set; }
 
     public double Total { get; set; }
 
     public Account()
     {
         this.Total = 0;
-        AccountInfos = new List<AccountInfo>();
+        TransactionInfos = new List<TransactionInfo>();
     }
 }

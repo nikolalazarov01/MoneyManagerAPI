@@ -27,7 +27,7 @@ public class AccountService : IAccountService
             var type = this.GetAccountInfoType(accountInfoDto.Type);
             if (!type.IsSuccessful) return operationResult.AppendErrors(type);
             
-            if (type.Data is AccountInfoType.Income)
+            if (type.Data is TransactionInfoType.Income)
             {
                 return operationResult;
             }
@@ -65,7 +65,7 @@ public class AccountService : IAccountService
             };
             var transformations = new List<Func<IQueryable<Account>, IQueryable<Account>>>
             {
-                a => a.Include(ac => ac.AccountInfos)
+                a => a.Include(ac => ac.TransactionInfos)
             };
 
             var accountResult = await this._repository.GetAsync(filters, transformations, token);
@@ -73,7 +73,7 @@ public class AccountService : IAccountService
 
             var account = accountResult.Data;
 
-            var accountInfo = new AccountInfo
+            var accountInfo = new TransactionInfo
             {
                 Account = account,
                 Total = accountInfoDto.Total,
@@ -84,13 +84,13 @@ public class AccountService : IAccountService
 
             accountInfo.Type = parsedType.Data;
 
-            account.AccountInfos.Add(accountInfo);
+            account.TransactionInfos.Add(accountInfo);
             switch (parsedType.Data)
             {
-                case AccountInfoType.Income:
+                case TransactionInfoType.Income:
                     account.Total += accountInfoDto.Total;
                     break;
-                case AccountInfoType.Outcome:
+                case TransactionInfoType.Outcome:
                     account.Total -= accountInfoDto.Total;
                     break;
                 default: break;
@@ -198,7 +198,7 @@ public class AccountService : IAccountService
             var transforms = new List<Func<IQueryable<Account>, IQueryable<Account>>>
             {
                 a => a.Include(ac => ac.Currency),
-                a => a.Include(ac => ac.AccountInfos)
+                a => a.Include(ac => ac.TransactionInfos)
             };
 
 
@@ -215,13 +215,13 @@ public class AccountService : IAccountService
         return operationResult;
     }
 
-    private OperationResult<AccountInfoType> GetAccountInfoType(string typeToParse)
+    private OperationResult<TransactionInfoType> GetAccountInfoType(string typeToParse)
     {
-        var operationResult = new OperationResult<AccountInfoType>();
-        AccountInfoType parsedType = AccountInfoType.Income;
+        var operationResult = new OperationResult<TransactionInfoType>();
+        TransactionInfoType parsedType = TransactionInfoType.Income;
         bool hasParsed = false;
 
-        foreach (AccountInfoType type in Enum.GetValues(typeof(AccountInfoType)))
+        foreach (TransactionInfoType type in Enum.GetValues(typeof(TransactionInfoType)))
         {
             if (type.ToString().ToLowerInvariant() == typeToParse.ToLowerInvariant())
             {
