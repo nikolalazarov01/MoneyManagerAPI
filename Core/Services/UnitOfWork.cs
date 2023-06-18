@@ -15,7 +15,8 @@ public class UnitOfWork : IUnitOfWork
     {
         Users = new UserService(repositoryFactory.Create<User>());
         Accounts = new AccountService(repositoryFactory.Create<Account>());
-        Currencies = new CurrencyService(repositoryFactory.Create<Currency>());
+        Currencies = new CurrencyService(repositoryFactory.Create<Currency>(), 
+            repositoryFactory.Create<CurrencyInfo>());
     }
 
 
