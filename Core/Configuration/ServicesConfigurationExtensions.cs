@@ -15,6 +15,8 @@ public static class ServicesConfigurationExtensions
 
         serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         serviceCollection.AddScoped<IRepositoryFactory, RepositoryFactory>();
-        serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
+        serviceCollection.AddScoped<IUserService, UserService>();
+        serviceCollection.AddScoped<IAccountService, AccountService>();
+        serviceCollection.AddScoped<ICurrencyService, CurrencyService>();
     }
 }
