@@ -22,13 +22,15 @@ namespace MoneyManager_API.Controllers;
 [Route("/user")]
 public class UserController : ControllerBase
 {
-    private readonly IUnitOfWork _services;
+    private readonly IUserService _userService;
+    private readonly ICurrencyService _currencyService;
     private readonly IValidator<CurrencyDto> _validatorCurrency;
     private readonly IMapper _mapper;
 
-    public UserController(IUnitOfWork services, IValidator<CurrencyDto> validatorCurrency, IMapper mapper)
+    public UserController(IUserService userService, ICurrencyService currencyService, IValidator<CurrencyDto> validatorCurrency, IMapper mapper)
     {
-        _services = services;
+        _userService = userService;
+        _currencyService = currencyService;
         _validatorCurrency = validatorCurrency;
         _mapper = mapper;
     }
@@ -44,7 +46,7 @@ public class UserController : ControllerBase
             u => u.Include(u => u.BaseCurrency)
         };
         
-        var result = await this._services.Users.GetUserById(id, transforms, token);
+        var result = await this._userService.GetUserById(id, transforms, token);
         if (!result.IsSuccessful) return this.Error(result);
 
         var representation = _mapper.Map<UserDto>(result.Data);
@@ -65,7 +67,7 @@ public class UserController : ControllerBase
             u => u.Include(a => a.Accounts).ThenInclude(ac => ac.Currency)
         };
 
-        var result = await this._services.Users.GetUserById(userId, transforms, token);
+        var result = await this._userService.GetUserById(userId, transforms, token);
         if (!result.IsSuccessful) return this.Error(result);
 
         var representation = _mapper.Map<UserDto>(result.Data);
@@ -104,7 +106,7 @@ public class UserController : ControllerBase
             var queryOptions = new QueryOptions<Currency>();
             queryOptions.AddFilter(c => c.Code.ToLower() == currencyDto.Code.ToLower());
 
-            var result = await this._services.Currencies.GetCurrencyAsync(queryOptions, token);
+            var result = await this._currencyService.GetCurrencyAsync(queryOptions, token);
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
 
             Currency currency;
@@ -121,7 +123,7 @@ public class UserController : ControllerBase
                 };
             }
             
-            var setCurrencyResult = await this._services.Users.SetUserBaseCurrency(currency, userId, token);
+            var setCurrencyResult = await this._userService.SetUserBaseCurrency(currency, userId, token);
 
             if (!setCurrencyResult.IsSuccessful) return operationResult.AppendErrors(setCurrencyResult);
 

@@ -18,12 +18,14 @@ namespace MoneyManager_API.Controllers;
 [Route("/accounts")]
 public class AccountController : ControllerBase
 {
-    private readonly IUnitOfWork _services;
+    private readonly IAccountService _accountService;
+    private readonly IUserService _userService;
     private IMapper _mapper;
 
-    public AccountController(IUnitOfWork services, IMapper mapper)
+    public AccountController(IAccountService accountService, IUserService userService, IMapper mapper)
     {
-        _services = services;
+        _accountService = accountService;
+        _userService = userService;
         _mapper = mapper;
     }
 
@@ -39,7 +41,7 @@ public class AccountController : ControllerBase
         queryOptions.AddTransformation(a => a.Include(ac => ac.Currency));
         queryOptions.AddTransformation(a => a.Include(ac => ac.TransactionInfos));
 
-        var result = await this._services.Accounts.GetAccount(queryOptions, token);
+        var result = await this._accountService.GetAccount(queryOptions, token);
         if (!result.IsSuccessful) return this.Error(result);
 
         if (result.Data.UserId != userId)
@@ -59,7 +61,7 @@ public class AccountController : ControllerBase
         if (userId == Guid.Empty)
             return BadRequest();
 
-        var result = await this._services.Accounts.GetUserAccounts(userId, token);
+        var result = await this._accountService.GetUserAccounts(userId, token);
         if (!result.IsSuccessful) return this.Error(result);
 
         var representation = this._mapper.Map<IEnumerable<AccountDto>>(result.Data);
@@ -112,7 +114,7 @@ public class AccountController : ControllerBase
             if (!user.IsSuccessful) return operationResult.AppendErrors(user);
 
             var account = this._mapper.Map<Account>(accountRequestDto);
-            var result = await this._services.Accounts.AddNewAccountAsync(user.Data, account, token);
+            var result = await this._accountService.AddNewAccountAsync(user.Data, account, token);
 
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
 
@@ -134,7 +136,7 @@ public class AccountController : ControllerBase
 
         try
         {
-            var result = await this._services.Accounts.DeleteAccountAsync(accountId, token);
+            var result = await this._accountService.DeleteAccountAsync(accountId, token);
             if (!result.IsSuccessful) return operationResult.AppendErrors(result);
         }
         catch (Exception ex)

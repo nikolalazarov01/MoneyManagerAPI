@@ -13,12 +13,12 @@ namespace MoneyManager_API.Controllers;
 [Route("/transaction")]
 public class TransactionController : ControllerBase
 {
-    private readonly IUnitOfWork _services;
+    private readonly IAccountService _accountService;
     private readonly IMapper _mapper;
 
-    public TransactionController(IUnitOfWork services, IMapper mapper)
+    public TransactionController(IAccountService accountService, IMapper mapper)
     {
-        _services = services;
+        _accountService = accountService;
         _mapper = mapper;
     }
 
@@ -26,10 +26,10 @@ public class TransactionController : ControllerBase
     [Authorize]
     public async Task<IActionResult> MakeTransaction([FromBody] AccountInfoRequestDto accountInfoDto, CancellationToken token)
     {
-        var validationResult = await this._services.Accounts.ValidateTransaction(accountInfoDto, token);
+        var validationResult = await this._accountService.ValidateTransaction(accountInfoDto, token);
         if (!validationResult.IsSuccessful) return this.Error(validationResult);
 
-        var result = await this._services.Accounts.MakeTransaction(accountInfoDto, token);
+        var result = await this._accountService.MakeTransaction(accountInfoDto, token);
         if (!result.IsSuccessful) return this.Error(result);
 
         var representation = this._mapper.Map<AccountDto>(result.Data);
