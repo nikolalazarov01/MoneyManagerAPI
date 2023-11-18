@@ -4,6 +4,9 @@ using Data.Models.Contracts;
 
 namespace Data.Models;
 
+/// <summary>
+/// Keeps records of a specific currency's data, such as buy and sell rates for specific day
+/// </summary>
 public class CurrencyInfo : IEntity
 {
     [Key]

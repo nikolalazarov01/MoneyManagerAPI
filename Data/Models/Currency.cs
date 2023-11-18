@@ -3,6 +3,9 @@ using Data.Models.Contracts;
 
 namespace Data.Models;
 
+/// <summary>
+/// Keeps the currency's code ("BGN", "EUR"...) and a collection of it's infos (buy/sell rates)
+/// </summary>
 public class Currency : IEntity
 {
     [Key]

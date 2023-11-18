@@ -29,6 +29,13 @@ public class AccountController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// REST method, that returns account for the logged in user and if not found - error
+    /// It returns also the HATEOAS navigation links 
+    /// </summary>
+    /// <param name="id">Identifier of the account being searched</param>
+    /// <param name="token">Auto injected .net token</param>
+    /// <returns></returns>
     [HttpGet("{id:guid}")]
     [Authorize]
     public async Task<IActionResult> GetAccountById([FromRoute] Guid id, CancellationToken token)
@@ -53,6 +60,12 @@ public class AccountController : ControllerBase
         return Ok(result.Data);
     }
 
+    /// <summary>
+    /// REST metdod that returns all the logged in user's accounts
+    /// It returns also the HATEOAS navigation links
+    /// </summary>
+    /// <param name="token">Auto injected .net token</param>
+    /// <returns></returns>
     [HttpGet("user-accounts")]
     [Authorize]
     public async Task<IActionResult> GetUserAccounts(CancellationToken token)
@@ -72,7 +85,14 @@ public class AccountController : ControllerBase
         
         return Ok(representation);
     }
-    
+
+    /// <summary>
+    /// REST method, that removes a logged in user's account, based on the account id
+    /// It returns also the HATEOAS navigation links
+    /// </summary>
+    /// <param name="id">The account's id</param>
+    /// <param name="token">Auto injected .net token</param>
+    /// <returns></returns>
     [HttpDelete("{id:guid}")]
     [Authorize]
     public async Task<IActionResult> RemoveById([FromRoute] Guid id, CancellationToken token)
@@ -86,7 +106,14 @@ public class AccountController : ControllerBase
 
         return NoContent();
     }
-    
+
+    /// <summary>
+    /// REST method that creates account for the logged in user, based on the provided data
+    /// It returns also the HATEOAS navigation links
+    /// </summary>
+    /// <param name="accountRequestDto">The account data, provided by the user</param>
+    /// <param name="token">Auto injected .net token</param>
+    /// <returns></returns>
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> AddUserAccount([FromBody] NewAccountRequestDto accountRequestDto, CancellationToken token)
@@ -101,6 +128,13 @@ public class AccountController : ControllerBase
         return CreatedAtAction("GetAccountById", new {Id = result.Data.Id}, result.Data);
     }
 
+    /// <summary>
+    /// Private method that is being used to coordinate the business logic from the services
+    /// </summary>
+    /// <param name="accountRequestDto">The account data, being provided by the user</param>
+    /// <param name="userId">The logged in user's id</param>
+    /// <param name="token">Auto injected .net token</param>
+    /// <returns></returns>
     private async Task<OperationResult<NewAccountCreatedDto>> CreateAccountAsync(NewAccountRequestDto accountRequestDto, Guid userId, CancellationToken token)
     {
         var operationResult = new OperationResult<NewAccountCreatedDto>();
@@ -110,7 +144,7 @@ public class AccountController : ControllerBase
             {
                 u => u.Include(a => a.Accounts)
             };
-            var user = await this._services.Users.GetUserById(userId, transforms, token);
+            var user = await this._userService.GetUserById(userId, transforms, token);
             if (!user.IsSuccessful) return operationResult.AppendErrors(user);
 
             var account = this._mapper.Map<Account>(accountRequestDto);
@@ -130,6 +164,12 @@ public class AccountController : ControllerBase
         return operationResult;
     }
 
+    /// <summary>
+    /// A private method, that is being used to coordinate the business logic for deleting a user's account
+    /// </summary>
+    /// <param name="accountId">The identifier of the account that must be deleted</param>
+    /// <param name="token">Auto injected .net token</param>
+    /// <returns></returns>
     private async Task<OperationResult> DeleteAccount(Guid accountId, CancellationToken token)
     {
         var operationResult = new OperationResult();
@@ -147,6 +187,11 @@ public class AccountController : ControllerBase
         return operationResult;
     }
 
+    /// <summary>
+    /// Method that provides the HATEOAS navigation links to the REST methods
+    /// </summary>
+    /// <param name="accountId">Id of the data being manipulated</param>
+    /// <returns></returns>
     private IEnumerable<HateoasLink> GetHateoasLinks(Guid accountId)
     {
         var links = new List<HateoasLink>()

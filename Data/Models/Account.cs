@@ -4,6 +4,9 @@ using Data.Models.Contracts;
 
 namespace Data.Models;
 
+/// <summary>
+/// Keeps data about a user's account (a user can have multiple accounts in different currencies)
+/// </summary>
 public class Account : IEntity
 {
     [Key]
@@ -21,6 +24,9 @@ public class Account : IEntity
     
     public ICollection<TransactionInfo>? TransactionInfos { get; set; }
 
+    /// <summary>
+    /// Data of the total amount of money in the current account in the account's currency
+    /// </summary>
     public double Total { get; set; }
 
     public Account()
