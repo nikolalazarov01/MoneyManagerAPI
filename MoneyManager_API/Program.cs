@@ -1,13 +1,12 @@
 using System.Reflection;
 using System.Text;
 using Core.Configuration;
-using Data;
+using Core.Contracts;
+using CurrencyService;
+using CurrencyService.Contracts;
+using CurrencyService.Extensions;
 using Data.Configuration;
-using Data.Models;
-using Data.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MoneyManager_API.Configuration;
 
@@ -22,6 +21,7 @@ builder.Services.SetupDatabase(configuration);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.SetupServices();
+builder.Services.SetupCurrencyServices();
 builder.Services.SetupValidation();
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:SecretKey");
@@ -48,7 +48,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var apiService = builder.Services?.BuildServiceProvider().GetRequiredService<IApiCallService>();
+var currencyService = builder.Services?.BuildServiceProvider().GetRequiredService<ICurrencyService>();
 
+ApiTrigger trigger = new ApiTrigger(apiService, currencyService);
+trigger.ScheduleTrigger();
 
 var app = builder.Build();
 
